@@ -49,15 +49,15 @@ public struct FMQuery {
     // 👇 these are your Swift model property names. Map your Filemaker field names with CodingKey string literals.
     
     public struct FieldData: Codable {
-        let myProperty: String
-        // let address: String
-        // ...
-        
-        public enum CodingKeys: String, CodingKey {
-            case myProperty
-            // case name = "street_address"
-            // ...
-        }
+//        let myProperty: String
+//        // let address: String
+//        // ...
+//
+//        public enum CodingKeys: String, CodingKey {
+//            case myProperty
+//            // case name = "street_address"
+//            // ...
+//        }
     }
     
     
