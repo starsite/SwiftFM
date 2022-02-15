@@ -21,7 +21,7 @@ public extension Data {
         }
     }
     
-    private static let types: [UInt8 : String] = [
+    static let types: [UInt8 : String] = [
         
         0xFF : "image/jpeg",
         0x89 : "image/png",

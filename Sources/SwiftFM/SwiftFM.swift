@@ -9,13 +9,13 @@
 import Foundation
 import SwiftUI
 
-class SwiftFM {
+open class SwiftFM {
     
     
     
     // MARK: - new session -> .token?
     
-    public class func newSession() async -> String? {
+    open class func newSession() async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -58,7 +58,7 @@ class SwiftFM {
     
     // MARK: - validate session -> Bool
     
-    public class func validateSession(token: String) async -> Bool {
+    open class func validateSession(token: String) async -> Bool {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/validateSession")
@@ -95,7 +95,7 @@ class SwiftFM {
         
 //    // ❌ we can't use this for .scenePhase.background in SwiftUI... use the @escaping method below
 //
-//    public class func deleteSession(token: String) async -> Bool {
+//    open class func deleteSession(token: String) async -> Bool {
 //
 //        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
 //                let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -135,7 +135,7 @@ class SwiftFM {
     
     // ✅ we need an @escaping method for .scenePhase.background in SwiftUI
     
-    public class func deleteSession(token: String, completion: @escaping (Bool) -> Void) {
+    open class func deleteSession(token: String, completion: @escaping (Bool) -> Void) {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -177,7 +177,7 @@ class SwiftFM {
     
     // MARK: - query -> .data?
     
-    public class func query(layout: String, payload: [String: Any], token: String) async -> [FMQuery.Record]? {
+    open class func query(layout: String, payload: [String: Any], token: String) async -> [FMQuery.Record]? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -219,7 +219,7 @@ class SwiftFM {
     
     // MARK: - get record id -> .data?.first
 
-    public class func getRecord(id: Int, layout: String, token: String) async -> FMQuery.Record? {
+    open class func getRecord(id: Int, layout: String, token: String) async -> FMQuery.Record? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -259,7 +259,7 @@ class SwiftFM {
     
     // MARK: - create record -> .recordId?
     
-    public class func createRecord(layout: String, payload: [String: Any], token: String) async -> String? {
+    open class func createRecord(layout: String, payload: [String: Any], token: String) async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -301,7 +301,7 @@ class SwiftFM {
     
     // MARK: - duplicate record -> .recordId?
     
-    public class func duplicateRecord(id: Int, layout: String, token: String) async -> String? {
+    open class func duplicateRecord(id: Int, layout: String, token: String) async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -341,7 +341,7 @@ class SwiftFM {
     
     // MARK: - edit record -> .modId?
     
-    public class func editRecord(id: Int, layout: String, payload: [String: Any], modId: Int?, token: String) async -> String? {
+    open class func editRecord(id: Int, layout: String, payload: [String: Any], modId: Int?, token: String) async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -383,7 +383,7 @@ class SwiftFM {
 
     // MARK: - set globals -> Bool
     
-    public class func setGlobals(payload: [String: Any], token: String) async -> Bool {
+    open class func setGlobals(payload: [String: Any], token: String) async -> Bool {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -422,7 +422,7 @@ class SwiftFM {
     
     // MARK: - get product info -> .productInfo?
     
-    public class func getProductInfo() async -> FMProduct.ProductInfo? {
+    open class func getProductInfo() async -> FMProduct.ProductInfo? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/productInfo")
@@ -467,7 +467,7 @@ class SwiftFM {
     
     // MARK: - get databases -> .databases?
     
-    public class func getDatabases() async -> [FMDatabases.Database]? {
+    open class func getDatabases() async -> [FMDatabases.Database]? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases")
@@ -505,7 +505,7 @@ class SwiftFM {
     
     // MARK: - get layouts -> .layouts?
     
-    public class func getLayouts(token: String) async -> [FMLayouts.Layout]? {
+    open class func getLayouts(token: String) async -> [FMLayouts.Layout]? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -545,7 +545,7 @@ class SwiftFM {
     
     // MARK: - get layout metadata -> .fieldMetaData?
     
-    public class func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.Response? {
+    open class func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.Response? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -590,7 +590,7 @@ class SwiftFM {
     
     // MARK: - set container -> fileName?
 
-    public class func setContainer(id: Int, layout: String, containerField: String, filePath: URL, modId: Int?, token: String) async -> String? {
+    open class func setContainer(id: Int, layout: String, containerField: String, filePath: URL, modId: Int?, token: String) async -> String? {
         
         // url
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
