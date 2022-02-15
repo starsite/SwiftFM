@@ -13,20 +13,20 @@ import Foundation
 public struct FMDatabases: Codable {
     
     public struct Result: Codable {
-        let response: Response
-        let messages: [Message]
+        public let response: Response
+        public let messages: [Message]
     }
     
     public struct Message: Codable {
-        let code: String
-        let message: String
+        public let code: String
+        public let message: String
     }
     
     public struct Response: Codable {
-        let databases: [Database]
+        public let databases: [Database]
     }
     
     public struct Database: Codable {
-        let name: String
+        public let name: String
     }
 }

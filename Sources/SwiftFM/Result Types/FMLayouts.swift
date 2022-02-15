@@ -13,29 +13,29 @@ import Foundation
 public struct FMLayouts: Codable {
     
     public struct Result: Codable {
-        let response: Response
-        let messages: [Message]
+        public let response: Response
+        public let messages: [Message]
     }
     
     public struct Message: Codable {
-        let code: String
-        let message: String
+        public let code: String
+        public let message: String
     }
     
     public struct Response: Codable {
-        let layouts: [Layout]
+        public let layouts: [Layout]
     }
     
     public struct Layout: Codable {
-        let name: String
-        let table: String?
-        let isFolder: Bool?
-        let folderLayoutNames: [FolderLayoutName]?
+        public let name: String
+        public let table: String?
+        public let isFolder: Bool?
+        public let folderLayoutNames: [FolderLayoutName]?
     }
     
     public struct FolderLayoutName: Codable {
-        let name: String
-        let table: String
+        public let name: String
+        public let table: String
     }
     
 }

@@ -13,25 +13,25 @@ import Foundation
 public struct FMProduct: Codable {
     
     public struct Result: Codable {
-        let response: Response
-        let messages: [Message]
+        public let response: Response
+        public let messages: [Message]
     }
     
     public struct Message: Codable {
-        let code: String
-        let message: String
+        public let code: String
+        public let message: String
     }
     
     public struct Response: Codable {
-        let productInfo: ProductInfo
+        public let productInfo: ProductInfo
     }
     
     public struct ProductInfo: Codable {
-        let name: String
-        let buildDate: String
-        let version: String
-        let dateFormat: String
-        let timeFormat: String
-        let timeStampFormat: String
+        public let name: String
+        public let buildDate: String
+        public let version: String
+        public let dateFormat: String
+        public let timeFormat: String
+        public let timeStampFormat: String
     }
 }

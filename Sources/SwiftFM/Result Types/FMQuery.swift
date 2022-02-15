@@ -13,27 +13,27 @@ import Foundation
 public struct FMQuery {
     
     public struct Result: Codable {
-        let response: Response
-        let messages: [Message]
+        public let response: Response
+        public let messages: [Message]
     }
     
     public struct Message: Codable {
-        let code: String
-        let message: String
+        public let code: String
+        public let message: String
     }
     
     public struct Response: Codable {
-        let dataInfo: DataInfo?
-        let data: [Record]?  // <-- ✨ SwiftFM.query() method return
+        public let dataInfo: DataInfo?
+        public let data: [Record]?  // <-- ✨ SwiftFM.query() method return
     }
     
     public struct DataInfo: Codable {
-        let database: String
-        let layout: String
-        let table: String
-        let totalRecordCount: Int
-        let foundCount: Int
-        let returnedCount: Int
+        public let database: String
+        public let layout: String
+        public let table: String
+        public let totalRecordCount: Int
+        public let foundCount: Int
+        public let returnedCount: Int
     }
     
     public struct Record: Codable {
@@ -49,8 +49,8 @@ public struct FMQuery {
     // 👇 these are your Swift model property names. Map your Filemaker field names with CodingKey string literals.
     
     public struct FieldData: Codable {
-//        let myProperty: String
-//        // let address: String
+//        public let myProperty: String
+//        // public let address: String
 //        // ...
 //
 //        public enum CodingKeys: String, CodingKey {
@@ -63,11 +63,11 @@ public struct FMQuery {
     
     
     public struct PortalDataInfo: Codable {
-        let portalObjectName: String
-        let database: String
-        let table: String
-        let foundCount: Int
-        let returnedCount: Int
+        public let portalObjectName: String
+        public let database: String
+        public let table: String
+        public let foundCount: Int
+        public let returnedCount: Int
     }
     
     /*
@@ -78,21 +78,21 @@ public struct FMQuery {
     // change `myPortalObjectName` and add your properties to `PortalRecord`.
     
     public struct PortalData: Codable {
-        let myPortalObjectName: [PortalRecord]?
+        public let myPortalObjectName: [PortalRecord]?
     }
     
     
     // these are your Swift model property names. Map your Filemaker portal field names with CodingKey string literals.
     
     public struct PortalRecord: Codable {
-        let recordId: String
-        let modId: String
+        public let recordId: String
+        public let modId: String
         // let myProperty: String
         // ...
         
         public enum CodingKeys: String, CodingKey {
-            case recordId
-            case modId
+            public case recordId
+            public case modId
             // case myProperty = "relatedTable::fieldName"
             // ...
         }
