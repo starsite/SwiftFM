@@ -12,23 +12,23 @@ import Foundation
 
 public struct FMLayoutMetaData: Codable {
     
-    struct Result: Codable {
+    public struct Result: Codable {
         let response: Response
         let messages: [Message]
     }
     
-    struct Message: Codable {
+    public struct Message: Codable {
         let code: String
         let message: String
     }
     
-    struct Response: Codable {
+    public struct Response: Codable {
         let fieldMetaData: [Field]?
         let portalMetaData: PortalMetaData?
         let valueLists: [ValueList]?
     }
     
-    struct Field: Codable {
+    public struct Field: Codable {
         let name: String
         let type: String
         let displayType: String
@@ -46,16 +46,16 @@ public struct FMLayoutMetaData: Codable {
         let valueList: String?
     }
     
-    struct PortalMetaData: Codable {  // to do
+    public struct PortalMetaData: Codable {  // to do
     }
     
-    struct ValueList: Codable {
+    public struct ValueList: Codable {
         let name: String
         let type: String
         let values: [Value]
     }
     
-    struct Value: Codable {
+    public struct Value: Codable {
         let displayValue: String
         let value: String
     }

@@ -12,17 +12,17 @@ import Foundation
 
 public struct FMRecord: Codable {
     
-    struct Result: Codable {
+    public struct Result: Codable {
         let response: Response
         let messages: [Message]
     }
     
-    struct Message: Codable {
+    public struct Message: Codable {
         let code: String
         let message: String
     }
     
-    struct Response: Codable {
+    public struct Response: Codable {
         let recordId: String?
         let modId: String?
     }

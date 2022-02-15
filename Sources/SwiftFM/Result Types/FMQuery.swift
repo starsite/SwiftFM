@@ -12,22 +12,22 @@ import Foundation
 
 public struct FMQuery {
     
-    struct Result: Codable {
+    public struct Result: Codable {
         let response: Response
         let messages: [Message]
     }
     
-    struct Message: Codable {
+    public struct Message: Codable {
         let code: String
         let message: String
     }
     
-    struct Response: Codable {
+    public struct Response: Codable {
         let dataInfo: DataInfo?
         let data: [Record]?  // <-- ✨ SwiftFM.query() method return
     }
     
-    struct DataInfo: Codable {
+    public struct DataInfo: Codable {
         let database: String
         let layout: String
         let table: String
@@ -36,7 +36,7 @@ public struct FMQuery {
         let returnedCount: Int
     }
     
-    struct Record: Codable {
+    public struct Record: Codable {
         let recordId: String  // <-- ✨ useful as a \.keyPath in SwiftUI List views... ie. List(artists, id: \.recordId)
         let modId: String
         let fieldData: FieldData
@@ -48,12 +48,12 @@ public struct FMQuery {
     
     // 👇 these are your Swift model property names. Map your Filemaker field names with CodingKey string literals.
     
-    struct FieldData: Codable {
+    public struct FieldData: Codable {
         let myProperty: String
         // let address: String
         // ...
         
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case myProperty
             // case name = "street_address"
             // ...
@@ -62,7 +62,7 @@ public struct FMQuery {
     
     
     
-    struct PortalDataInfo: Codable {
+    public struct PortalDataInfo: Codable {
         let portalObjectName: String
         let database: String
         let table: String
@@ -77,20 +77,20 @@ public struct FMQuery {
     
     // change `myPortalObjectName` and add your properties to `PortalRecord`.
     
-    struct PortalData: Codable {
+    public struct PortalData: Codable {
         let myPortalObjectName: [PortalRecord]?
     }
     
     
     // these are your Swift model property names. Map your Filemaker portal field names with CodingKey string literals.
     
-    struct PortalRecord: Codable {
+    public struct PortalRecord: Codable {
         let recordId: String
         let modId: String
         // let myProperty: String
         // ...
         
-        enum CodingKeys: String, CodingKey {
+        public enum CodingKeys: String, CodingKey {
             case recordId
             case modId
             // case myProperty = "relatedTable::fieldName"

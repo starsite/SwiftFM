@@ -12,21 +12,21 @@ import Foundation
 
 public struct FMProduct: Codable {
     
-    struct Result: Codable {
+    public struct Result: Codable {
         let response: Response
         let messages: [Message]
     }
     
-    struct Message: Codable {
+    public struct Message: Codable {
         let code: String
         let message: String
     }
     
-    struct Response: Codable {
+    public struct Response: Codable {
         let productInfo: ProductInfo
     }
     
-    struct ProductInfo: Codable {
+    public struct ProductInfo: Codable {
         let name: String
         let buildDate: String
         let version: String

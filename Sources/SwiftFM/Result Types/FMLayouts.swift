@@ -12,28 +12,28 @@ import Foundation
 
 public struct FMLayouts: Codable {
     
-    struct Result: Codable {
+    public struct Result: Codable {
         let response: Response
         let messages: [Message]
     }
     
-    struct Message: Codable {
+    public struct Message: Codable {
         let code: String
         let message: String
     }
     
-    struct Response: Codable {
+    public struct Response: Codable {
         let layouts: [Layout]
     }
     
-    struct Layout: Codable {
+    public struct Layout: Codable {
         let name: String
         let table: String?
         let isFolder: Bool?
         let folderLayoutNames: [FolderLayoutName]?
     }
     
-    struct FolderLayoutName: Codable {
+    public struct FolderLayoutName: Codable {
         let name: String
         let table: String
     }
