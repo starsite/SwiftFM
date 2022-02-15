@@ -10,4 +10,4 @@ Documentation forthcoming.
 
 Thanks for your support of this project over the past 3.5 years. 😘
 
-~Brian
+~Brian, Starsite Labs
