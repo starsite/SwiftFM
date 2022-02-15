@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Find Requests or Get RecordId -> .data?
 
-struct FMQuery {
+open struct FMQuery {
     
     struct Result: Codable {
         let response: Response

@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Set Container -> fileName? (class property on SwiftFM.setContainer)
 
-struct FMContainer: Codable {
+public struct FMContainer: Codable {
     
     struct Result: Codable {
         let response: Response

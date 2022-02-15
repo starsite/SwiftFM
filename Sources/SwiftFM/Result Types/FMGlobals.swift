@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Set Globals -> Bool
 
-struct FMGlobals: Codable {
+public struct FMGlobals: Codable {
     
     struct Result: Codable {
         let response: Response

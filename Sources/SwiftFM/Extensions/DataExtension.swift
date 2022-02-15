@@ -12,7 +12,7 @@ import Foundation
 
 // if you have trouble sniffing correct mime types (or simply don't want to), uncomment the `mimeType = "application/octet-stream"` line in SwiftFM.setContainer()
 
-extension Data {
+public extension Data {
     
     mutating func append(_ string: String) {
         

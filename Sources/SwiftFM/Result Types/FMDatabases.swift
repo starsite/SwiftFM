@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Get Databases -> .databases
 
-struct FMDatabases: Codable {
+public struct FMDatabases: Codable {
     
     struct Result: Codable {
         let response: Response
