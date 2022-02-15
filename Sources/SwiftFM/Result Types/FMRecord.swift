@@ -13,6 +13,7 @@ import Foundation
 public struct FMRecord: Codable {
     
     public struct Result: Codable {
+        public let response: Response
         public let messages: [Message]
     }
     

@@ -91,8 +91,8 @@ public struct FMQuery {
         // ...
         
         public enum CodingKeys: String, CodingKey {
-            public case recordId
-            public case modId
+            case recordId
+            case modId
             // case myProperty = "relatedTable::fieldName"
             // ...
         }
