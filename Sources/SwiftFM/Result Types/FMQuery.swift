@@ -37,11 +37,11 @@ public struct FMQuery {
     }
     
     public struct Record: Codable {
-        let recordId: String  // <-- ✨ useful as a \.keyPath in SwiftUI List views... ie. List(artists, id: \.recordId)
-        let modId: String
-        let fieldData: FieldData
-        let portalDataInfo: [PortalDataInfo]?
-        let portalData: PortalData
+       public let recordId: String  // <-- ✨ useful as a \.keyPath in SwiftUI List views... ie. List(artists, id: \.recordId)
+       public let modId: String
+       public let fieldData: FieldData
+       public let portalDataInfo: [PortalDataInfo]?
+       public let portalData: PortalData
     }
     
     
