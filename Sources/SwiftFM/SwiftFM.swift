@@ -214,7 +214,7 @@ open class SwiftFM {
     
     // MARK: - find request -> (dataInfo?, [record]?)
     
-    open class func query(layout: String, payload: [String: Any], token: String) async -> ([String: Any]?, [[String: Any]]?) {
+    open class func query(layout: String, payload: [String: Any], token: String) async -> (Data?, Data?) {
                 
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -241,13 +241,15 @@ open class SwiftFM {
         // return
         switch code {
         case "0":
-            guard  let dataInfo = response["dataInfo"] as? [String: Any],
-                   let records  = response["data"] as? [[String: Any]]
+            guard  let data  = response["data"] as? [[String: Any]],
+                   let dataInfo = response["dataInfo"] as? [String: Any],
+                   let records = try? JSONSerialization.data(withJSONObject: data),
+                   let meta = try? JSONSerialization.data(withJSONObject: dataInfo)
             
             else { return (nil, nil) }
             
             print("fetched \(records.count) records")
-            return (dataInfo, records)
+            return (meta, records)
             
         default:
             print(message)
