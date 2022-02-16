@@ -9,8 +9,8 @@
 import Foundation
 import SwiftUI
 
+
 open class SwiftFM {
-    
     
     
     // MARK: - new session -> .token?
@@ -175,7 +175,7 @@ open class SwiftFM {
     
     
     
-    // MARK: - find request -> (dataInfo?, [record]?)
+    // MARK: - find request -> ([record]?, dataInfo?)
     
     open class func query(layout: String, payload: [String: Any], token: String) async -> (Data?, Data?) {
                 
@@ -225,7 +225,7 @@ open class SwiftFM {
     
     
     
-    // MARK: - get record with id -> (dataInfo?, record?)
+    // MARK: - get record with id -> ([record]?, dataInfo?)
     
     open class func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
         
@@ -241,11 +241,11 @@ open class SwiftFM {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let json     = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                let response = json["response"] as? [String: Any],
-                let messages = json["messages"] as? [[String: Any]],
-                let message  = messages[0]["message"] as? String,
-                let code     = messages[0]["code"] as? String
+                let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                let response  = json["response"] as? [String: Any],
+                let messages  = json["messages"] as? [[String: Any]],
+                let message   = messages[0]["message"] as? String,
+                let code      = messages[0]["code"] as? String
                     
         else { return (nil, nil) }
         
@@ -603,8 +603,8 @@ open class SwiftFM {
     open class func setContainer(id: Int, layout: String, containerField: String, filePath: URL, modId: Int?, token: String) async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-                let db = UserDefaults.standard.string(forKey: "fm-db"),
-                let url = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)/containers/\(containerField)")
+                let db   = UserDefaults.standard.string(forKey: "fm-db"),
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)/containers/\(containerField)")
                     
         else { return nil }
         
