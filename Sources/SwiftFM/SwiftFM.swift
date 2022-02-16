@@ -241,15 +241,15 @@ open class SwiftFM {
         // return
         switch code {
         case "0":
-            guard  let data  = response["data"] as? [[String: Any]],
+            guard  let data     = response["data"] as? [[String: Any]],
                    let dataInfo = response["dataInfo"] as? [String: Any],
-                   let records = try? JSONSerialization.data(withJSONObject: data),
-                   let meta = try? JSONSerialization.data(withJSONObject: dataInfo)
+                   let records  = try? JSONSerialization.data(withJSONObject: data),
+                   let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
             
             else { return (nil, nil) }
             
-            print("fetched \(records.count) records")
-            return (meta, records)
+            print("fetched \(data.count) records")
+            return (records, info)
             
         default:
             print(message)
