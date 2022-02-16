@@ -173,43 +173,6 @@ open class SwiftFM {
     
     
     
-//    query() and getRecord() return types 👇
-    
-//    struct DataInfo: Codable {
-//        let database: String
-//        let layout: String
-//        let table: String
-//        let totalRecordCount: Int
-//        let foundCount: Int
-//        let returnedCount: Int
-//    }
-//
-//    struct Record: Codable {
-//        let recordId: String  // <-- ✨ useful as a \.keyPath in SwiftUI List views... ie. List(artists, id: \.recordId)
-//        let modId: String
-//        let fieldData: FieldData
-//        let portalDataInfo: [PortalDataInfo]?
-//        let portalData: PortalData
-//    }
-//
-//
-//    these are your Swift model properties. Map your Filemaker field names with CodingKeys (string literals as needed)
-//
-//    struct FieldData: Codable {
-//        let name: String
-//        let address: String
-//        // ...
-//
-//        enum CodingKeys: String, CodingKey {
-//            case name
-//            case address = "street_address"
-//            // ...
-//        }
-//    }
-
-    
-    
-    
     
     
     // MARK: - find request -> (dataInfo?, [record]?)
@@ -339,7 +302,7 @@ open class SwiftFM {
         case "0":
             guard let recordId = result.response.recordId else { return nil }
             
-            print("new recordId: \(recordId)")
+            print("✨ new recordId: \(recordId)")
             return recordId
             
         default:
@@ -379,7 +342,7 @@ open class SwiftFM {
         case "0":
             guard let recordId = result.response.recordId else { return nil }
             
-            print("new recordId: \(recordId)")
+            print("✨ new recordId: \(recordId)")
             return recordId
             
         default:
@@ -421,7 +384,7 @@ open class SwiftFM {
         case "0":
             guard let modId = result.response.modId else { return nil }
             
-            print("new modId: \(modId)")
+            print("updated modId: \(modId)")
             return modId
             
         default:
@@ -497,14 +460,7 @@ open class SwiftFM {
         switch message.code {
         case "0":
             let info = result.response.productInfo
-            
-            print("\nProduct Info:\n")
-            print("Name: \(info.name)")
-            print("Build Date: \(info.buildDate)")
-            print("Version: \(info.version)")
-            print("Date Format: \(info.dateFormat)")
-            print("Time Format: \(info.timeFormat)")
-            print("Timestamp Format: \(info.timeStampFormat)")
+            print("product: \(info.name) (\(info.version))")
             
             return info
             
