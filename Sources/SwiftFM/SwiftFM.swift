@@ -255,8 +255,8 @@ open class SwiftFM {
             print(message)
             return (nil, nil)
         }
-
     }
+    
     
     
     
@@ -264,7 +264,7 @@ open class SwiftFM {
     
     // MARK: - get record with id -> (dataInfo?, record?)
     
-    open class func getRecord(id: Int, layout: String, token: String) async -> ([String: Any]?, [String: Any]?) {
+    open class func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -289,109 +289,27 @@ open class SwiftFM {
         // return
         switch code {
         case "0":
-            guard  let dataInfo = response["dataInfo"] as? [String: Any],
-                   let records  = response["data"] as? [[String: Any]],
-                   let record   = records.first
+            guard  let data     = response["data"] as? [[String: Any]],
+                   let data0    = data.first,
+                   let dataInfo = response["dataInfo"] as? [String: Any],
+                   let record   = try? JSONSerialization.data(withJSONObject: data0),
+                   let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
                     
             else { return (nil, nil) }
             
             print("fetched recordId: \(id)")
-            return (dataInfo, record)
+            return (record, info)
             
         default:
             print(message)
             return (nil, nil)
         }
-
     }
-
-    
     
 
     
     
-    // MARK: - query -> .data?
-
-    open class func altQuery(layout: String, payload: [String: Any], token: String) async -> Data? {
-
-        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-                let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/_find"),
-                let body = try? JSONSerialization.data(withJSONObject: payload)
-
-        else { return nil }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
-
-        guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMQuery.Result.self, from: data),
-                let message   = result.messages.first
-
-        else { return nil }
-
-        // return
-        switch message.code {
-        case "0":
-//            guard let records = result.response else { return [] }
-//
-//            print("fetched \(records.count) records")
-            let response = try? JSONSerialization.data(withJSONObject: result.response)
-            return response
-            
-        default:
-            print(message)
-            return nil
-        }
-    }
-
-
-
-
-
-
-    // MARK: - get record id -> .data?.first
-
-    open class func altGetRecord(id: Int, layout: String, token: String) async -> FMQuery.Record? {
-
-        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-                let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)")
-
-        else { return nil }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMQuery.Result.self, from: data),
-                let message   = result.messages.first
-
-        else { return nil }
-
-        // return
-        switch message.code {
-        case "0":
-            guard let record = result.response.data?.first else { return nil }
-
-            print("fetched recordId: \(record.recordId)")
-            return record
-
-        default:
-            print(message)
-            return nil
-        }
-    }
-
     
-    
-    
-
     
     // MARK: - create record -> .recordId?
     
@@ -728,7 +646,6 @@ open class SwiftFM {
 
     open class func setContainer(id: Int, layout: String, containerField: String, filePath: URL, modId: Int?, token: String) async -> String? {
         
-        // url
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db = UserDefaults.standard.string(forKey: "fm-db"),
                 let url = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)/containers/\(containerField)")
@@ -767,7 +684,7 @@ open class SwiftFM {
         request.httpBody = httpBody
 
         
-        // urlsession
+        // session
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let result    = try? JSONDecoder().decode(FMContainer.Result.self, from: data),
                 let message   = result.messages.first
