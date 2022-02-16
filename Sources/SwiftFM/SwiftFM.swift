@@ -310,7 +310,7 @@ open class SwiftFM {
     
     // MARK: - query -> .data?
 
-    open class func altQuery(layout: String, payload: [String: Any], token: String) async -> FMQuery.Response? {
+    open class func altQuery(layout: String, payload: [String: Any], token: String) async -> Data? {
 
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -337,8 +337,9 @@ open class SwiftFM {
 //            guard let records = result.response else { return [] }
 //
 //            print("fetched \(records.count) records")
-            return result.response
-
+            let response = try? JSONSerialization.data(withJSONObject: result.response)
+            return response
+            
         default:
             print(message)
             return nil
