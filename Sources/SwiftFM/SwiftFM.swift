@@ -69,7 +69,7 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -190,8 +190,8 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -239,8 +239,8 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -289,8 +289,8 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -330,8 +330,8 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
@@ -371,8 +371,8 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -413,8 +413,8 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "PATCH"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -527,7 +527,7 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -567,7 +567,7 @@ open class SwiftFM {
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
@@ -594,6 +594,45 @@ open class SwiftFM {
             return nil
         }
     }
+    
+    
+    
+    
+    
+    
+    // MARK: - execute script -> Bool
+    
+    open class func executeScript(script: String, parameter: String = "", layout: String, token: String) async -> Bool {
+        
+        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
+                let db   = UserDefaults.standard.string(forKey: "fm-db"),
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/script/\(script)?script.param=\(parameter)")
+                    
+        else { return false }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard   let (data, _) = try? await URLSession.shared.data(for: request),
+                let result    = try? JSONDecoder().decode(FMScript.Result.self, from: data),
+                let message   = result.messages.first
+                    
+        else { return false }
+        
+        // return
+        switch message.code {
+        case "0":
+            
+            print("fired script: \(script)")
+            return true
+            
+        default:
+            print(message)
+            return false
+        }
+    }
 
     
     
@@ -616,8 +655,8 @@ open class SwiftFM {
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         
         // file data
