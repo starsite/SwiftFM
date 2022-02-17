@@ -239,24 +239,32 @@ open class SwiftFM {
         
         let order = ascending ? "ascend" : "descend"
         
-        let json = """
+        let sortJson = """
         [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
         """
         
-        guard let data = json.data(using: .utf8),
-              let str = String(data: data, encoding: .utf8),
-              let enc = str.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        let portalJson = """
+        ["\(portal)"]
+        """
+        
+        guard let sortData = sortJson.data(using: .utf8),
+              let sortStr = String(data: sortData, encoding: .utf8),
+              let sortEnc = sortStr.urlEncoded,
+              let portalData = portalJson.data(using: .utf8),
+              let portalStr = String(data: portalData, encoding: .utf8),
+              let portalEnc = portalStr.urlEncoded
                 
         else { return (nil, nil) }
+        
+        
 
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(enc)&portal=\(portal)") else {
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)") else {
                     
         return (nil, nil) }
         
-        print(url)
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -824,7 +832,11 @@ open class SwiftFM {
 
 
 
-
+extension String {
+    var urlEncoded: String? {
+        return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+    }
+}
 
 
 
