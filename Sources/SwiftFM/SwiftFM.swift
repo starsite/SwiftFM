@@ -232,8 +232,8 @@ open class SwiftFM {
     open class func getRecords(layout: String,
                                limit: Int,
                                sortField: String,
-                               ascending: Bool = true,
-                               portal: String = "",
+                               ascending: Bool,
+                               portal: String?,
                                token: String) async -> (Data?, Data?) {
         
         
@@ -243,9 +243,15 @@ open class SwiftFM {
         [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
         """
         
-        let portalJson = """
-        ["\(portal)"]
-        """
+        var portalJson = "[]"
+        
+        if portal != nil {
+            
+            portalJson = """
+            ["\(portal!)"]
+            """
+        }
+                
         
         // encoding
         guard let sortData   = sortJson.data(using: .utf8),
