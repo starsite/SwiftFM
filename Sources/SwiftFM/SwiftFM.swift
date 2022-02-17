@@ -237,6 +237,7 @@ open class SwiftFM {
                                token: String) async -> (Data?, Data?) {
         
         
+        // param str
         let order = ascending ? "ascend" : "descend"
         
         let sortJson = """
@@ -245,10 +246,9 @@ open class SwiftFM {
         
         var portalJson = "[]"
         
-        if portal != nil {
-            
+        if let portal = portal {  // non nil
             portalJson = """
-            ["\(portal!)"]
+            ["\(portal)"]
             """
         }
                 
@@ -266,9 +266,9 @@ open class SwiftFM {
         // url
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)") else {
-                    
-        return (nil, nil) }
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)")
+        
+        else { return (nil, nil) }
         
         
         // request
@@ -285,6 +285,7 @@ open class SwiftFM {
                 let code      = messages[0]["code"] as? String
                     
         else { return (nil, nil) }
+        
         
         // return
         switch code {
@@ -522,6 +523,7 @@ open class SwiftFM {
     
     
     
+    
     // MARK: - get product info -> .productInfo?
     
     open class func getProductInfo() async -> FMProduct.ProductInfo? {
@@ -722,8 +724,7 @@ open class SwiftFM {
     
     
     
-    
-    
+        
     // MARK: - execute script -> Bool
     
     open class func executeScript(script: String, parameter: String = "", layout: String, token: String) async -> Bool {
@@ -833,16 +834,5 @@ open class SwiftFM {
 
     
 }  // .SwiftFM 😘
-
-
-
-
-
-extension String {
-    var urlEncoded: String? {
-        return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-    }
-}
-
 
 
