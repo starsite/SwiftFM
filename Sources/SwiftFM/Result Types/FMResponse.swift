@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - DataInfo response for Find Requests and Get RecordId
 
-public struct FMResponse {
+public struct FMResponse: Codable {
     
     public let database: String
     public let layout: String
