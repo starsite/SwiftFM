@@ -1,5 +1,5 @@
 //
-//  DataInfo.swift
+//  FMResponse.swift
 //  SwiftFM
 //
 //  Created by Brian Hamm on 2/14/22.
@@ -8,9 +8,9 @@
 import Foundation
 
 
-// MARK: - DataInfo response for Find Requests and Get RecordId        
+// MARK: - DataInfo response for Find Requests and Get RecordId
 
-public struct DataInfo: Codable {
+public struct FMResponse {
     
     public let database: String
     public let layout: String

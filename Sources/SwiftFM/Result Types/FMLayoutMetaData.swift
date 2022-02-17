@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Get Layout Metadata -> .response
 
-public struct FMLayoutMetaData: Codable {
+public struct FMLayoutMetaData {
     
     public struct Result: Codable {
         public let response: Response

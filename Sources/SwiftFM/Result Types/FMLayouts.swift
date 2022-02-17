@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Get Layouts -> .layouts
 
-public struct FMLayouts: Codable {
+public struct FMLayouts {
     
     public struct Result: Codable {
         public let response: Response

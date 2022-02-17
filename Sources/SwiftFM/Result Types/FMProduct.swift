@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Get Product Info -> .productInfo
 
-public struct FMProduct: Codable {
+public struct FMProduct {
     
     public struct Result: Codable {
         public let response: Response

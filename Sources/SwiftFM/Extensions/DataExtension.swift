@@ -10,8 +10,6 @@ import Foundation
 
 // MARK: - Data extension for SwiftFM.setContainer()
 
-// if you have trouble sniffing correct mime types (or simply don't want to), uncomment the `mimeType = "application/octet-stream"` line in SwiftFM.setContainer()
-
 public extension Data {
     
     mutating func append(_ string: String) {

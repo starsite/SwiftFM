@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - New Session, Validate Session, or Delete Session -> .token?
 
-public struct FMSession: Codable {
+public struct FMSession {
     
     public struct Result: Codable {
         public let response: Response

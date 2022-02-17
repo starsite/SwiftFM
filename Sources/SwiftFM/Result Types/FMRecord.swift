@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Create Record, Duplicate Record, or Edit Record -> .recordId? or .modId?
 
-public struct FMRecord: Codable {
+public struct FMRecord {
     
     public struct Result: Codable {
         public let response: Response
