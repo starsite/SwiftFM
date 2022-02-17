@@ -243,9 +243,11 @@ open class SwiftFM {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/_limit=\(limit)&_sort=\(sort)&portal=\(portal)") else {
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sort)&portal=\(portal)") else {
                     
-                    return (nil, nil) }
+        return (nil, nil) }
+        
+        print(url)
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
