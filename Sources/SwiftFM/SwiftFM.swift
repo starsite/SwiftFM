@@ -238,7 +238,7 @@ open class SwiftFM {
         
         
         let order = ascending ? "ascending" : "descending"
-        let sort  = [["fieldName":"\(sortField)", "sortOrder": "\(order)"]]
+        let sort  = "[{\"fieldName\":\"\(sortField)\",\"sortOrder\":\"\(order)\"}]"
         
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
