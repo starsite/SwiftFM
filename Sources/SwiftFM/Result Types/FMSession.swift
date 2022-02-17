@@ -8,7 +8,7 @@
 import Foundation
 
 
-// MARK: - New Session, Validate Session, or Delete Session -> .token?
+// MARK: - New Session, Validate Session, or Delete Session -> Bool or .token?
 
 public struct FMSession {
     

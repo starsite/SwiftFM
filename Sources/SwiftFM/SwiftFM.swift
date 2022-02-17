@@ -418,7 +418,7 @@ open class SwiftFM {
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMGlobals.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
                 let message   = result.messages.first
                     
         else { return false }
@@ -600,6 +600,47 @@ open class SwiftFM {
     
     
     
+    // MARK: - get scripts -> .scripts?
+    
+    open class func getScripts(token: String) async -> [FMScripts.Script]? {
+        
+        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
+                let db   = UserDefaults.standard.string(forKey: "fm-db"),
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/scripts")
+                    
+        else { return nil }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard   let (data, _) = try? await URLSession.shared.data(for: request),
+                let result    = try? JSONDecoder().decode(FMScripts.Result.self, from: data),
+                let message   = result.messages.first
+                    
+        else { return nil }
+        
+        // return
+        switch message.code {
+        case "0":
+            let scripts = result.response.scripts
+            
+            print("\(scripts.count) scripts")
+            return scripts
+            
+        default:
+            print(message)
+            return nil
+        }
+    }
+
+    
+    
+    
+    
+    
+    
     // MARK: - execute script -> Bool
     
     open class func executeScript(script: String, parameter: String = "", layout: String, token: String) async -> Bool {
@@ -616,7 +657,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMScript.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
                 let message   = result.messages.first
                     
         else { return false }
@@ -683,7 +724,7 @@ open class SwiftFM {
         
         // session
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMContainer.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }

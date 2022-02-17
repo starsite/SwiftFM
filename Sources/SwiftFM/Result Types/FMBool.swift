@@ -1,5 +1,5 @@
 //
-//  FMScript.swift
+//  FMBool.swift
 //  SwiftFM
 //
 //  Created by Brian Hamm on 2/16/22.
@@ -8,9 +8,9 @@
 import Foundation
 
 
-// MARK: - Execute Script -> Bool
+// MARK: - Set Container, Set Globals, Execute Script -> Bool
 
-public struct FMScript {
+public struct FMBool {
     
     public struct Result: Codable {
         public let response: Response
