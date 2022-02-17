@@ -237,13 +237,22 @@ open class SwiftFM {
                                token: String) async -> (Data?, Data?) {
         
         
-        let order = ascending ? "ascending" : "descending"
-        let sort  = "[{\"fieldName\":\"\(sortField)\",\"sortOrder\":\"\(order)\"}]"
+        let order = ascending ? "ascend" : "descend"
         
+        let json = """
+        [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
+        """
+        
+        guard let data = json.data(using: .utf8),
+              let str = String(data: data, encoding: .utf8),
+              let enc = str.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+                
+        else { return (nil, nil) }
+
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sort)&portal=\(portal)") else {
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(enc)&portal=\(portal)") else {
                     
         return (nil, nil) }
         
