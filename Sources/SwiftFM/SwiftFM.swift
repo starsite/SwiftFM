@@ -233,7 +233,7 @@ open class SwiftFM {
                                limit: Int,
                                sortField: String,
                                ascending: Bool = true,
-                               portal: String = "[]",
+                               portal: String = "",
                                token: String) async -> (Data?, Data?) {
         
         
@@ -247,18 +247,17 @@ open class SwiftFM {
         ["\(portal)"]
         """
         
-        guard let sortData = sortJson.data(using: .utf8),
-              let sortStr = String(data: sortData, encoding: .utf8),
-              let sortEnc = sortStr.urlEncoded,
+        // encoding
+        guard let sortData   = sortJson.data(using: .utf8),
+              let sortEnc    = String(data: sortData, encoding: .utf8)?.urlEncoded,
+              
               let portalData = portalJson.data(using: .utf8),
-              let portalStr = String(data: portalData, encoding: .utf8),
-              let portalEnc = portalStr.urlEncoded
+              let portalEnc  = String(data: portalData, encoding: .utf8)?.urlEncoded
                 
         else { return (nil, nil) }
         
-        
 
-        
+        // url
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)") else {
@@ -266,6 +265,7 @@ open class SwiftFM {
         return (nil, nil) }
         
         
+        // request
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
