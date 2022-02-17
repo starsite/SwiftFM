@@ -360,7 +360,12 @@ open class SwiftFM {
     
     // MARK: - edit record -> .modId?
     
-    open class func editRecord(id: Int, layout: String, payload: [String: Any], modId: Int?, token: String) async -> String? {
+    open class func editRecord(id: Int,
+                               layout: String,
+                               payload: [String: Any],
+                               modId: Int? = nil,
+                               token: String) async -> String? {
+        
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -682,11 +687,18 @@ open class SwiftFM {
     
     // MARK: - set container -> fileName?
 
-    open class func setContainer(id: Int, layout: String, containerField: String, filePath: URL, modId: Int?, token: String) async -> String? {
+    open class func setContainer(recordId: Int,
+                                 layout: String,
+                                 containerField: String,
+                                 filePath: URL,
+                                 inferMimeType: Bool,
+                                 modId: Int? = nil,
+                                 token: String) async -> String? {
+        
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)/containers/\(containerField)")
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(recordId)/containers/\(containerField)")
                     
         else { return nil }
         
@@ -703,8 +715,7 @@ open class SwiftFM {
         // file data
         guard let fileData = try? Data(contentsOf: filePath) else { return nil }
         
-        let mimeType = fileData.mimeType              // <-- .mimeType is part of DataExtension.swift
-//      let mimeType = "application/octet-stream"     // you can use "application/octet-stream" instead, if you're having trouble sniffing the mime type
+        let mimeType = inferMimeType ? fileData.mimeType : "application/octet-stream"
         
         
         // body
@@ -718,7 +729,7 @@ open class SwiftFM {
         httpBody.append(fileData)
         httpBody.append("\(br)--\(boundary)--\(br)")
         
-        request.addValue(String(httpBody.count), forHTTPHeaderField: "Content-Length")
+        request.setValue(String(httpBody.count), forHTTPHeaderField: "Content-Length")
         request.httpBody = httpBody
 
         
@@ -743,7 +754,6 @@ open class SwiftFM {
     }
     
 
-    
     
 }  // .SwiftFM 😘
 
