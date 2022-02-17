@@ -227,6 +227,64 @@ open class SwiftFM {
     
     
     
+    // MARK: - get records -> ([record]?, dataInfo?)
+    
+    open class func getRecords(layout: String,
+                               limit: Int,
+                               sortField: String,
+                               ascending: Bool = true,
+                               portal: String = "[]",
+                               token: String) async -> (Data?, Data?) {
+        
+        
+        let order = ascending ? "ascending" : "descending"
+        let sort  = [["fieldName":"\(sortField)", "sortOrder": "\(order)"]]
+        
+        
+        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
+                let db   = UserDefaults.standard.string(forKey: "fm-db"),
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/_limit=\(limit)&_sort=\(sort)&portal=\(portal)") else {
+                    
+                    return (nil, nil) }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard   let (data, _) = try? await URLSession.shared.data(for: request),
+                let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                let response  = json["response"] as? [String: Any],
+                let messages  = json["messages"] as? [[String: Any]],
+                let message   = messages[0]["message"] as? String,
+                let code      = messages[0]["code"] as? String
+                    
+        else { return (nil, nil) }
+        
+        // return
+        switch code {
+        case "0":
+            guard  let data     = response["data"] as? [[String: Any]],
+                   let dataInfo = response["dataInfo"] as? [String: Any],
+                   let records  = try? JSONSerialization.data(withJSONObject: data),
+                   let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
+                    
+            else { return (nil, nil) }
+            
+            print("fetched \(data.count) records")
+            return (records, info)
+            
+        default:
+            print(message)
+            return (nil, nil)
+        }
+    }
+
+    
+    
+    
+    
+    
     // MARK: - get record with id -> ([record]?, dataInfo?)
     
     open class func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
@@ -278,7 +336,7 @@ open class SwiftFM {
     
     // MARK: - create record -> .recordId?
     
-    open class func createRecord(layout: String, payload: [String: Any], token: String) async -> String? {
+    open class func createRecord(layout: String, payload: [String: Any] = ["fieldData":[]], token: String) async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -360,12 +418,7 @@ open class SwiftFM {
     
     // MARK: - edit record -> .modId?
     
-    open class func editRecord(id: Int,
-                               layout: String,
-                               payload: [String: Any],
-                               modId: Int? = nil,
-                               token: String) async -> String? {
-        
+    open class func editRecord(id: Int, layout: String, payload: [String: Any], token: String) async -> String? {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
@@ -689,16 +742,15 @@ open class SwiftFM {
 
     open class func setContainer(recordId: Int,
                                  layout: String,
-                                 containerField: String,
+                                 container: String,
                                  filePath: URL,
-                                 inferMimeType: Bool,
-                                 modId: Int? = nil,
+                                 inferType: Bool = true,
                                  token: String) async -> String? {
         
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(recordId)/containers/\(containerField)")
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(recordId)/containers/\(container)")
                     
         else { return nil }
         
@@ -715,7 +767,7 @@ open class SwiftFM {
         // file data
         guard let fileData = try? Data(contentsOf: filePath) else { return nil }
         
-        let mimeType = inferMimeType ? fileData.mimeType : "application/octet-stream"
+        let mimeType = inferType ? fileData.mimeType : "application/octet-stream"
         
         
         // body
