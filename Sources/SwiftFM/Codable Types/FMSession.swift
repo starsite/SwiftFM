@@ -1,5 +1,5 @@
 //
-//  FMGlobals.swift
+//  FMSession.swift
 //  SwiftFM
 //
 //  Created by Brian Hamm on 2/14/22.
@@ -8,9 +8,9 @@
 import Foundation
 
 
-// MARK: - Set Globals -> Bool
+// MARK: - New Session, Validate Session, or Delete Session -> .token? or Bool
 
-public struct FMGlobals {
+public struct FMSession {
     
     public struct Result: Codable {
         public let response: Response
@@ -23,5 +23,6 @@ public struct FMGlobals {
     }
     
     public struct Response: Codable {
+        public let token: String?
     }
 }

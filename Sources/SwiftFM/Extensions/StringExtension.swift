@@ -13,6 +13,7 @@ import Foundation
 public extension String {
     
     var urlEncoded: String? {
+        
         return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
     }
 }
