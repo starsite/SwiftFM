@@ -26,14 +26,22 @@ public struct FMScripts {
         public let scripts: [Script]
     }
     
-    public struct Script: Codable {
+    public struct Script: Codable, Comparable {
         public let name: String
         public let isFolder: Bool
         public let folderScriptNames: [FolderScriptName]?
+        
+        public static func < (lhs: FMScripts.Script, rhs: FMScripts.Script) -> Bool {
+            lhs.name < rhs.name
+        }
     }
     
-    public struct FolderScriptName: Codable {
+    public struct FolderScriptName: Codable, Comparable {
         public let name: String
         public let isFolder: Bool
+        
+        public static func < (lhs: FMScripts.FolderScriptName, rhs: FMScripts.FolderScriptName) -> Bool {
+            lhs.name < rhs.name
+        }
     }
 }

@@ -26,7 +26,11 @@ public struct FMDatabases {
         public let databases: [Database]
     }
     
-    public struct Database: Codable {
+    public struct Database: Codable, Comparable {
         public let name: String
+        
+        public static func < (lhs: FMDatabases.Database, rhs: FMDatabases.Database) -> Bool {
+            lhs.name < rhs.name
+        }
     }
 }

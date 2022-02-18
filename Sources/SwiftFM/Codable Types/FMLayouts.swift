@@ -26,16 +26,24 @@ public struct FMLayouts {
         public let layouts: [Layout]
     }
     
-    public struct Layout: Codable {
+    public struct Layout: Codable, Comparable {
         public let name: String
         public let table: String?
         public let isFolder: Bool?
         public let folderLayoutNames: [FolderLayoutName]?
+        
+        public static func < (lhs: FMLayouts.Layout, rhs: FMLayouts.Layout) -> Bool {
+            lhs.name < rhs.name
+        }
     }
     
-    public struct FolderLayoutName: Codable {
+    public struct FolderLayoutName: Codable, Comparable {
         public let name: String
         public let table: String
+        
+        public static func < (lhs: FMLayouts.FolderLayoutName, rhs: FMLayouts.FolderLayoutName) -> Bool {
+            lhs.name < rhs.name
+        }
     }
     
 }

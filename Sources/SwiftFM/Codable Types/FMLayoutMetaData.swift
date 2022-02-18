@@ -28,7 +28,7 @@ public struct FMLayoutMetaData {
         public let valueLists: [ValueList]?
     }
     
-    public struct Field: Codable {
+    public struct Field: Codable, Comparable {
         public let name: String
         public let type: String
         public let displayType: String
@@ -44,20 +44,32 @@ public struct FMLayoutMetaData {
         public let repetitionStart: Int
         public let repetitionEnd: Int
         public let valueList: String?
+        
+        public static func < (lhs: FMLayoutMetaData.Field, rhs: FMLayoutMetaData.Field) -> Bool {
+            lhs.name < rhs.name
+        }
     }
     
     public struct PortalMetaData: Codable {  // to do
     }
     
-    public struct ValueList: Codable {
+    public struct ValueList: Codable, Comparable {
         public let name: String
         public let type: String
         public let values: [Value]
+        
+        public static func < (lhs: FMLayoutMetaData.ValueList, rhs: FMLayoutMetaData.ValueList) -> Bool {
+            lhs.name < rhs.name
+        }
     }
     
-    public struct Value: Codable {
+    public struct Value: Codable, Comparable {
         public let displayValue: String
         public let value: String
+        
+        public static func < (lhs: FMLayoutMetaData.Value, rhs: FMLayoutMetaData.Value) -> Bool {
+            lhs.displayValue < rhs.displayValue
+        }
     }
     
 }
