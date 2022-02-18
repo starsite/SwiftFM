@@ -1,13 +1,13 @@
 # SwiftFM
 
-Swift wrapper for the FileMaker Data API (Swift 5+, iOS 15+)
+Swift framework for the FileMaker Data API (Swift 5+, iOS 15+)
 
-SwiftFM was refactored (rewritten from scratch) last week, put under version control, and now provides support for Swift Package Manager (SPM).
+SwiftFM was ~~refactored~~ rewritten from scratch last week, put under version control, and now provides support for Swift Package Manager (SPM). 🎉
 
-Notable improvements include type-safe Codable returns and support for async/await. Several APIs were added, including support for executing scripts, setting containers, as well as getting metadata on hosts, databases, layouts, and scripts.
+Notable improvements include async/await and type-safe Codable returns. Several new APIs were added, including support for executing scripts, setting containers, as well as getting metadata on hosts, databases, layouts, and scripts.
 
-Documentation (extensive) forthcoming.
+Documentation (extensive) forthcoming, with SwiftUI examples.
 
-Thanks for your support of this project over the past 3.5 years. 😘
+Thanks for supporting this project over the past 3 years. It means a lot. 😘
 
 ~Brian, Starsite Labs
