@@ -254,13 +254,8 @@ open class SwiftFM {
                 
         
         // encoding
-        guard let sortData   = sortJson.data(using: .utf8),
-              let sortEnc    = String(data: sortData, encoding: .utf8)?.urlEncoded,
-              
-              let portalData = portalJson.data(using: .utf8),
-              let portalEnc  = String(data: portalData, encoding: .utf8)?.urlEncoded
-                
-        else { return (nil, nil) }
+        guard   let sortEnc   = sortJson.urlEncoded,
+                let portalEnc = portalJson.urlEncoded else { return (nil, nil) }
         
 
         // url
