@@ -735,9 +735,12 @@ open class SwiftFM {
     
     open class func executeScript(script: String, parameter: String = "", layout: String, token: String) async -> Bool {
         
+        guard let scriptEnc = script.urlEncoded,
+              let paramEnc  = parameter.urlEncoded else { return false }
+        
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/script/\(script)?script.param=\(parameter)")
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/script/\(scriptEnc)?script.param=\(paramEnc)")
                     
         else { return false }
         
