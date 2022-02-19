@@ -362,12 +362,18 @@ open class SwiftFM {
     
     // MARK: - create record -> .recordId?
     
-    open class func createRecord(layout: String, payload: [String: Any] = ["fieldData":[]], token: String) async -> String? {
+    open class func createRecord(layout: String, payload: [String: Any]?, token: String) async -> String? {
+        
+        var fieldData: [String: Any] = ["fieldData": [:]]
+        
+        if let payload = payload {
+            fieldData = payload
+        }
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records"),
-                let body = try? JSONSerialization.data(withJSONObject: payload)
+                let body = try? JSONSerialization.data(withJSONObject: fieldData)
         
         else { return nil }
         
