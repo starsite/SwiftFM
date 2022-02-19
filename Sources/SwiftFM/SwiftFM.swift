@@ -177,7 +177,7 @@ open class SwiftFM {
     
     
     
-    // MARK: - find request -> ([record]?, dataInfo?)
+    // MARK: - query -> ([record]?, dataInfo?)
     
     open class func query(layout: String, payload: [String: Any], token: String) async -> (Data?, Data?) {
                 
@@ -311,7 +311,7 @@ open class SwiftFM {
     
     
     
-    // MARK: - get record with id -> ([record]?, dataInfo?)
+    // MARK: - get record id -> ([record]?, dataInfo?)
     
     open class func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
         
@@ -735,21 +735,31 @@ open class SwiftFM {
     
     open class func executeScript(script: String, parameter: String?, layout: String, token: String) async -> Bool {
         
+        
+        // parameter
         var param = ""
         
         if let parameter = parameter {
             param = parameter
         }
         
-        guard let scriptEnc = script.urlEncoded,
-              let paramEnc  = param.urlEncoded else { return false }
         
+        // encoding
+        guard   let scriptEnc = script.urlEncoded,
+                let paramEnc  = param.urlEncoded
+        
+        else { return false }
+        
+        
+        // url
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/script/\(scriptEnc)?script.param=\(paramEnc)")
                     
         else { return false }
         
+        
+        // request
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -760,6 +770,7 @@ open class SwiftFM {
                 let message   = result.messages.first
                     
         else { return false }
+        
         
         // return
         switch message.code {
@@ -785,7 +796,7 @@ open class SwiftFM {
                                  layout: String,
                                  container: String,
                                  filePath: URL,
-                                 inferType: Bool = true,
+                                 inferType: Bool,
                                  token: String) async -> String? {
         
         
