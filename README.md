@@ -41,8 +41,8 @@ SwiftFM was rewritten from scratch to use modern Swift features like `async` and
 * [`deleteSession(token:)`](#Delete-Session-(function)-->-@escaping-Bool)
 * [`createRecord(layout:payload:token:)`](#✨-create-record-(function)-->-.recordId?)
 * [`duplicateRecord(id:layout:token:)`](#duplicate-record-(function)-->-.recordId?)
-* [`editRecord(id:layout:payload:token:)`](#edit-record-(function) ->-.modId?)
-* [`deleteRecord(id:layout:token:)`](#🔥-delete-record-(function) ->-bool)
+* [`editRecord(id:layout:payload:token:)`](#edit-record-(function)-->-.modId?)
+* [`deleteRecord(id:layout:token:)`](#🔥-delete-record-(function)-->-bool)
 * [`query(layout:payload:token:)`](#🔍-query-(function)-->-([record]?,-.dataInfo?))
 * [`getRecords(layout:limit:sortField:ascending:portal:token:)`](#get-records-(function)-->-([record]?,-.dataInfo?))
 * [`getRecord(id:layout:token:)`](#get-record-(function)-->-(record?,-.dataInfo?))
@@ -120,7 +120,7 @@ struct MyApp: App {
     }
     
     var body: some Scene {
-				// ...
+        // ...
     }
 }
 ```
@@ -173,7 +173,7 @@ func newSession() async -> String? {
 
 ```swift
 if let token = await SwiftFM.newSession() {
-		print("✨ new token » \(token)")
+    print("✨ new token » \(token)")
 }
 ```
 
@@ -619,7 +619,7 @@ payload = ["query": [
   	["firstName": "Brian", "city": "Dallas"]
 ]]
 
-let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 let (data, _) = await SwiftFM.query(layout: "Artists", payload: payload, token: token)
 
@@ -737,7 +737,7 @@ struct ContentView: View {
           
             List(artists, id: \.recordId) { artist in
                 VStack(alignment: .leading) {
-                    Text("\(artist.fieldData.name)")     // 🥰 type-safe, Codable properties
+                    Text("\(artist.fieldData.name)")    // 🥰 type-safe, Codable properties
                 }
             }
             .navigationTitle("Artists")
