@@ -650,7 +650,7 @@ func getRecords(layout: String,
     [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
     """
 
-    var portalJson = "[]"  		// if nil portal
+    var portalJson = "[]"     // if nil portal
 
     if let portal = portal {  // else
         portalJson = """
@@ -1123,7 +1123,7 @@ if let fields = result.fieldMetaData?.sorted() {
 }
 
 if let valueLists = result.valueLists?.sorted() {
-    print("\Value Lists:")
+    print("\nValue Lists:")
     _ = valueLists.map { print($0.name) }
 }
 ```
@@ -1332,13 +1332,13 @@ An `inferType` of `true` will use `DataExtension.swift` (extensions folder) to a
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
-guard	let url = URL(string: "http://starsite.co/brian_memoji.png"),
-		let fileName = await SwiftFM.setContainer(recordId: 123,
+guard   let url = URL(string: "http://starsite.co/brian_memoji.png"),
+        let fileName = await SwiftFM.setContainer(recordId: 123,
                                                   layout: "Artist",
-                               					  container: "headshot",
-                               					  filePath: url,
-                               					  inferType: true,
-                               					  token: token) 
+                                                  container: "headshot",
+                                                  filePath: url,
+                                                  inferType: true,
+                                                  token: token) 
 else { return }
 
 print("container set: \(fileName)")
