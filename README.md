@@ -9,11 +9,7 @@ This `README.md` is aimed at Swift devs who want to use the Data API in their UI
 ### 🗳 How To Use
 
 * Xcode -> File -> Add Packages
-
-* ```
-    https://github.com/starsite/SwiftFM.git
-```
-
+* `https://github.com/starsite/SwiftFM.git`
 * **Swift**: Set your enivronment vars in `applicationWillEnterForeground(_:)`
 * **SwiftUI**: Set your enivronment vars in `MyApp.init()`
 * Call `SwiftFM.newSession()` and get a token ✨
@@ -1336,13 +1332,13 @@ An `inferType` of `true` will use `DataExtension.swift` (extensions folder) to a
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
-guard		let url = URL(string: "http://starsite.co/brian_memoji.png"),
-				let fileName = await SwiftFM.setContainer(recordId: 123,
-                               					layout: "Artist",
-                               					container: "headshot",
-                               					filePath: url,
-                               					inferType: true,
-                               					token: token) 
+guard	let url = URL(string: "http://starsite.co/brian_memoji.png"),
+		let fileName = await SwiftFM.setContainer(recordId: 123,
+                                                  layout: "Artist",
+                               					  container: "headshot",
+                               					  filePath: url,
+                               					  inferType: true,
+                               					  token: token) 
 else { return }
 
 print("container set: \(fileName)")
