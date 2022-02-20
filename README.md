@@ -610,13 +610,13 @@ Note the difference in payload between an "or" request vs. an "and" request.
 ```swift
 // find artists named Brian or Geoff
 payload = ["query": [
-  	["firstName": "Brian"],
-  	["firstName": "Geoff"]
+    ["firstName": "Brian"],
+    ["firstName": "Geoff"]
 ]]
 
 // find artists named Brian in Dallas
 payload = ["query": [
-  	["firstName": "Brian", "city": "Dallas"]
+    ["firstName": "Brian", "city": "Dallas"]
 ]]
 
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -768,7 +768,7 @@ struct ContentView: View {
 
         self.artists = records  // sets our @State artists array 👆
     }
-  	// ...
+    // ...
 }
 ```
 
