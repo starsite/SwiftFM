@@ -482,9 +482,47 @@ open class SwiftFM {
 
     
     
+    
+    
+    
+    // MARK: - delete record id -> Bool
+    
+    open class func deleteRecord(id: Int, layout: String, token: String) async -> Bool {
+        
+        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
+                let db   = UserDefaults.standard.string(forKey: "fm-db"),
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)")
+        
+        else { return false }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard   let (data, _) = try? await URLSession.shared.data(for: request),
+                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+                let message   = result.messages.first
+                    
+        else { return false }
+        
+        // return
+        switch message.code {
+        case "0":
+            print("deleted recordId: \(id)")
+            return true
+            
+        default:
+            print(message)
+            return false
+        }
+    }
 
     
 
+    
+
+    
     // MARK: - set globals -> Bool
     
     open class func setGlobals(payload: [String: Any], token: String) async -> Bool {
