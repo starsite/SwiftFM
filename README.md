@@ -718,7 +718,8 @@ There is a `.task` on `List` which will return data (async) from FileMaker. I'm 
 
 ```swift
 // model
-struct Artist {    
+struct Artist {
+
     struct Record: Codable {
         let recordId: String    // ✨ useful as a \.keyPath in List views
         let modId: String
