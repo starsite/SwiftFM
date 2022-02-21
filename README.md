@@ -62,7 +62,7 @@ SwiftFM was rewritten to use modern Swift features like `async/await`. This requ
 
 For TESTING, you can set these with string literals. For PRODUCTION, you should be fetching these values from elsewhere. DO NOT deploy apps with credentials visible in code. 😵
 
-### Example: Swift (UIKit)
+##### Example: Swift (UIKit)
 
 Set your environment in `AppDelegate` inside `applicationWillEnterForeground(_:)`. 
 
@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-### Example: SwiftUI
+##### Example: SwiftUI
 
 Set your environment in `MyApp: App`. If you don't see an `init()` function, add one and finish it out like this.
 
@@ -172,7 +172,7 @@ func newSession() async -> String? {
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 if let token = await SwiftFM.newSession() {
@@ -218,7 +218,7 @@ func validateSession(token: String) async -> Bool {
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -281,7 +281,7 @@ func deleteSession(token: String, completion: @escaping (Bool) -> Void) {
 }
 ```
 
-### Example: Swift (UIKit)
+##### Example: Swift (UIKit)
 
 ```swift
 @UIApplicationMain
@@ -297,7 +297,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-### Example: SwiftUI
+##### Example: SwiftUI
 
 ```swift
 @main
@@ -372,7 +372,7 @@ func createRecord(layout: String, payload: [String: Any]?, token: String) async 
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let payload = ["fieldData": [  // required key
@@ -430,7 +430,7 @@ func duplicateRecord(id: Int, layout: String, token: String) async -> String? {
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -487,7 +487,7 @@ func editRecord(id: Int, layout: String, payload: [String: Any], token: String) 
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -541,7 +541,7 @@ func deleteRecord(id: Int, layout: String, token: String) async -> Bool {
 }
 ```
 
-### Example
+##### Example
 
 ⚠️ This is Swift, not FileMaker. Nothing will prevent this from firing—immediately. Put some kind of confirmation view in your app.
 
@@ -606,7 +606,7 @@ func query(layout: String, payload: [String: Any], token: String) async -> (Data
 }
 ```
 
-### Example
+##### Example
 
 Note the difference in payload between an "or" request vs. an "and" request. 
 
@@ -707,7 +707,7 @@ func getRecords(layout: String,
 }
 ```
 
-### Example (SwiftUI)
+##### Example (SwiftUI)
 
 ✨ I'm including a **complete SwiftUI example** this time, showing the `model`, `view`, and a `fetchArtists(token:)` method. For those unfamiliar with SwiftUI, it's helpful to start in the middle of the example code and work your way out. Here's the gist:
 
@@ -826,7 +826,7 @@ func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -882,7 +882,7 @@ func setGlobals(payload: [String: Any], token: String) async -> Bool {
 }
 ```
 
-### Example
+##### Example
 
 Unlike `createRecord()` and `editRecord()`, global fields must be set using fully qualified field names, ie. `table name::field name`. Also, note our result here is a `Bool` and doesn't need to be unwrapped.
 
@@ -940,7 +940,7 @@ func getProductInfo() async -> FMProduct.ProductInfo? {
 }
 ```
 
-### Example
+##### Example
 
 This call doesn't require a token.
 
@@ -991,7 +991,7 @@ func getDatabases() async -> [FMDatabases.Database]? {
 }
 ```
 
-### Example
+##### Example
 
 This call doesn't require a token
 
@@ -1043,7 +1043,7 @@ func getLayouts(token: String) async -> [FMLayouts.Layout]? {
 }
 ```
 
-### Example
+##### Example
 
 Many SwiftFM result types conform to `Comparable`. 🥰  As such, you can use methods like `.sorted()`, `min()`, and `max()`.
 
@@ -1113,7 +1113,7 @@ func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -1172,7 +1172,7 @@ func getScripts(token: String) async -> [FMScripts.Script]? {
 }
 ```
 
-### Example
+##### Example
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
@@ -1249,7 +1249,7 @@ func executeScript(script: String, parameter: String?, layout: String, token: St
 }
 ```
 
-### Example
+##### Example
 
 `Script` and `parameter` values are `.urlEncoded`, so spaces and such are ok (if you must).
 
@@ -1328,7 +1328,7 @@ func setContainer(recordId: Int,
 }
 ```
 
-### Example
+##### Example
 
 An `inferType` of `true` will use `DataExtension.swift` (extensions folder) to attempt to set the mime-type automatically. If you don't want this behavior, set `inferType` to `false`, which assigns a default mime-type of "application/octet-stream".
 
