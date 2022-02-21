@@ -32,7 +32,7 @@ This was **a lot** of work, especcially the rewrite. If you'd like to support th
 
 ### ✅ Async/await
 
-SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can fork this repo and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [presentation](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can fork this repo and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
 
 ---
 
