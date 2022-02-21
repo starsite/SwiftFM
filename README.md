@@ -449,7 +449,7 @@ Returns an optional `modId`. Pass a `[String: Any]` object with a `fieldData` ke
 
 ⚠️ If you include the `modId` value in your `payload` (from say, an earlier fetch), the record will only be modified if the `modId` matches the value on FileMaker Server. This ensures you're working with the current version of the record. If you do **not** pass a `modId`, your changes will be applied without this check.
 
-Note: the FileMaker Data API does not pass back a modified record object for you to use. So you might want/need to refetch the updated record afterward with `getRecord(id:)`.
+Note: The FileMaker Data API does not pass back a modified record object for you to use. So you might want to refetch the updated record afterward with `getRecord(id:)`.
 
 ```swift
 func editRecord(id: Int, layout: String, payload: [String: Any], token: String) async -> String? {
