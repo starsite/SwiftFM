@@ -45,7 +45,7 @@ SwiftFM was rewritten to use modern Swift features like `async/await`. This requ
 * [`editRecord(id:layout:payload:token:)`](#edit-record-function---modid)
 * [`deleteRecord(id:layout:token:)`](#-delete-record-function---bool)
 * [`query(layout:payload:token:)`](#-query-function---record-datainfo)
-* [`getRecords(layout:limit:sortField:ascending:portal:token:)`](get-records-function---record-datainfo)
+* [`getRecords(layout:limit:sortField:ascending:portal:token:)`](#get-records-function---record-datainfo)
 * [`getRecord(id:layout:token:)`](#get-record-function---record-datainfo)
 * [`setGlobals(payload:token:)`](#set-globals-function---bool)
 * [`getProductInfo()`](#get-product-info-function---productinfo)
