@@ -241,7 +241,7 @@ case false:
 ---
 
 
-### Delete Session (function) -> @escaping Bool
+### 🔥 Delete Session (function) -> @escaping Bool
 
 Returns a `Bool`. For standard Swift (UIKit) apps, a good place to call this would be `applicationDidEnterBackground(_:)`. For SwiftUI apps, you should call it inside a `\.scenePhase.background` switch. 
 
