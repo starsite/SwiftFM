@@ -41,7 +41,7 @@ SwiftFM was rewritten to use modern Swift features like `async/await`. This requ
 * [`environment variables`](#environment-variables)
 * [`newSession()`](#-new-session-function---token)
 * [`validateSession(token:)`](#-validate-session-function---bool)
-* [`deleteSession(token:)`](#delete-session-function---escaping-bool)
+* [`deleteSession(token:)`](#-delete-session-function---escaping-bool)
 * [`createRecord(layout:payload:token:)`](#-create-record-function---recordid)
 * [`duplicateRecord(id:layout:token:)`](#duplicate-record-function---recordid)
 * [`editRecord(id:layout:payload:token:)`](#edit-record-function---modid)
