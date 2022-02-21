@@ -30,30 +30,31 @@ This was **a lot** of work, esp. the rewrite. If you'd like to support the Swift
 
 ### ✅ Async/await
 
-SwiftFM was rewritten from scratch to use modern Swift features like `async` and `await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can either use my previous version of SwiftFM, which uses `@escaping completion:` blocks, or convert your `URLSession` calls using `withCheckedContinuation`. For more information on that, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or Apple's WWDC 2021 [presentation](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can either download the old version of SwiftFM or fork this repo and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [presentation](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
 
 ---
 
 ### 📔 Table of Contents
 
-* [`newSession()`](#✨-new-session-(function)-->-.token?)
-* [`validateSession(token:)`](#✅-validate-session-(function)-->-bool)
-* [`deleteSession(token:)`](#Delete-Session-(function)-->-@escaping-Bool)
-* [`createRecord(layout:payload:token:)`](#✨-create-record-(function)-->-.recordId?)
-* [`duplicateRecord(id:layout:token:)`](#duplicate-record-(function)-->-.recordId?)
-* [`editRecord(id:layout:payload:token:)`](#edit-record-(function)-->-.modId?)
-* [`deleteRecord(id:layout:token:)`](#🔥-delete-record-(function)-->-bool)
-* [`query(layout:payload:token:)`](#🔍-query-(function)-->-([record]?,-.dataInfo?))
-* [`getRecords(layout:limit:sortField:ascending:portal:token:)`](#get-records-(function)-->-([record]?,-.dataInfo?))
-* [`getRecord(id:layout:token:)`](#get-record-(function)-->-(record?,-.dataInfo?))
-* [`setGlobals(payload:token:)`](#set-globals-(function)-->-bool)
-* [`getProductInfo()`](#get-product-info-(function)-->-.productInfo?)
-* [`getDatabases()`](#get-databases-(function)-->-.databases?)
-* [`getLayouts(token:)`](#get-layouts-(function)-->-.layouts?)
-* [`getLayoutMetaData(layout:token:)`](#get-layout-metadata-(function)-->-.response?)
-* [`getScripts(token:)`](#get-scripts-(function)-->-.scripts?)
-* [`executeScript(script:parameter:layout:token:)`](#execute-script-(function)-->-bool)
-* [`setContainer(recordId:layout:container:filePath:inferType:token:)`](#set-container-(function)-->-fileName?)
+* [`environment variables`](#environment-variables)
+* [`newSession()`](#-new-session-function---token)
+* [`validateSession(token:)`](#-validate-session-function---bool)
+* [`deleteSession(token:)`](#delete-session-function---escaping-bool)
+* [`createRecord(layout:payload:token:)`](#-create-record-function---recordid)
+* [`duplicateRecord(id:layout:token:)`](#duplicate-record-function---recordid)
+* [`editRecord(id:layout:payload:token:)`](#edit-record-function---modid)
+* [`deleteRecord(id:layout:token:)`](#-delete-record-function---bool)
+* [`query(layout:payload:token:)`](#-query-function---record-datainfo)
+* [`getRecords(layout:limit:sortField:ascending:portal:token:)`](get-records-function---record-datainfo)
+* [`getRecord(id:layout:token:)`](#get-record-function---record-datainfo)
+* [`setGlobals(payload:token:)`](#set-globals-function---bool)
+* [`getProductInfo()`](#get-product-info-function---productinfo)
+* [`getDatabases()`](#get-databases-function---databases)
+* [`getLayouts(token:)`](#get-layouts-function---layouts)
+* [`getLayoutMetaData(layout:token:)`](#get-layout-metadata-function---response)
+* [`getScripts(token:)`](#get-scripts-function---scripts)
+* [`executeScript(script:parameter:layout:token:)`](#execute-script-function---bool)
+* [`setContainer(recordId:layout:container:filePath:inferType:token:)`](#set-container-function---filename)
 
 ---
 
@@ -129,7 +130,9 @@ struct MyApp: App {
 
 ### ✨ New Session (function) -> .token?
 
-Returns an optional `token`. As mentioned, these calls use Swift's new `async`/`await` behavior. This is safer than `completion:` blocks for myriad reasons, in addition to being more readable. If the call fails due to an incorrect `username` or `password`, this method will return a FileMaker Data API error `code` and `message` to the console. All of the functions in SwiftFM behave this way.
+Returns an optional `token`.
+
+As mentioned, these calls use Swift's new `async`/`await` behavior. This is safer than `completion:` blocks for myriad reasons, in addition to being more readable. If the call fails due to an incorrect `username` or `password`, this method returns the FileMaker Data API error `code` and `message` to the console. All SwiftFM functions will output a simple success message or error.
 
 ```swift
 func newSession() async -> String? {
