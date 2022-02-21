@@ -40,8 +40,8 @@ SwiftFM was rewritten to use modern Swift features like `async/await`. This requ
 
 * [`environment variables`](#environment-variables)
 * [`newSession()`](#-new-session-function---token)
-* [`validateSession(token:)`](#-validate-session-function---bool)
-* [`deleteSession(token:)`](#-delete-session-function---escaping-bool)
+* [`validateSession(token:)`](#validate-session-function---bool)
+* [`deleteSession(token:)`](#delete-session-function---escaping-bool)
 * [`createRecord(layout:payload:token:)`](#-create-record-function---recordid)
 * [`duplicateRecord(id:layout:token:)`](#duplicate-record-function---recordid)
 * [`editRecord(id:layout:payload:token:)`](#edit-record-function---modid)
@@ -184,7 +184,7 @@ if let token = await SwiftFM.newSession() {
 
 ---
 
-### ✅ Validate Session (function) -> Bool
+### Validate Session (function) -> Bool
 
 FileMaker Data API 19 or later. Returns a `Bool`. This function isn't terribly helpful by itself. It's most helpful when used to wrap other calls, to ensure they'll be fired with a valid `token`. 
 
@@ -241,7 +241,7 @@ case false:
 ---
 
 
-### 🔥 Delete Session (function) -> @escaping Bool
+### Delete Session (function) -> @escaping Bool
 
 Returns a `Bool`. For standard Swift (UIKit) apps, a good place to call this would be `applicationDidEnterBackground(_:)`. For SwiftUI apps, you should call it inside a `\.scenePhase.background` switch. 
 
