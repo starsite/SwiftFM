@@ -224,6 +224,7 @@ func validateSession(token: String) async -> Bool {
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 let isValid = await SwiftFM.validateSession(token: token)
+
 switch isValid {
 case true:
     await fetchArtists(token: token)
