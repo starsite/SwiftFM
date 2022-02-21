@@ -32,7 +32,7 @@ This was **a lot** of work, especially the rewrite. If you'd like to support the
 
 ### ✅ Async/await
 
-SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can fork this repo and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, skip SPM and download the repo instead, and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
 
 ---
 
@@ -134,7 +134,7 @@ struct MyApp: App {
 
 Returns an optional `token`.
 
-As mentioned, these calls use Swift's new `async`/`await` behavior. This is safer than `completion:` blocks for myriad reasons, in addition to being more readable. If the call fails due to an incorrect username or password, this method returns the FileMaker Data API error `code` and `message` to the console. All SwiftFM functions will output a simple success message or error.
+As mentioned, these calls use Swift's new `async`/`await` behavior. This is safer than completion blocks for myriad reasons (in addition to being more readable). If `newSession()` fails due to an incorrect username or password, it will return a FileMaker Data API error `code` and `message` to the console. All SwiftFM calls that reach FileMaker Server will log either a simple success message or error.
 
 ```swift
 func newSession() async -> String? {
@@ -186,7 +186,7 @@ if let token = await SwiftFM.newSession() {
 
 ### Validate Session (function) -> Bool
 
-FileMaker Data API 19 or later. Returns a `Bool`. This function isn't terribly helpful by itself. It's most helpful when used to wrap other calls, to ensure they'll be fired with a valid `token`. 
+FileMaker Data API 19 or later. Returns a `Bool`. This function isn't all that useful on its own. But you can use it to wrap *other* calls to ensure they're fired with a valid `token`.
 
 ```swift
 func validateSession(token: String) async -> Bool {
@@ -838,9 +838,9 @@ let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 let (data, _) = await SwiftFM.getRecord(id: 123, layout: "Artists", token: token)
 
 guard let data = data,
-      let record = try? JSONDecoder().decode([Artist.Record].self, from: data) else { return }
+      let record = try? JSONDecoder().decode(Artist.Record.self, from: data) else { return }
 
-self.artists = record  // set data source
+self.artist = record
 ```
 
 - - -
