@@ -1071,7 +1071,7 @@ folders.forEach { folder in
 
 ### Get Layout Metadata (function) -> .response?
 
-FileMaker Data API 18 or later. Returns an optional `.response` object, containing `.fields` and `.valueList` data. A `.portalMetaData` object is be part of the `.response` as well, but will be unique to your FileMaker schema. So you'll need to model that yourself.
+FileMaker Data API 18 or later. Returns an optional `.response` object, containing `.fields` and `.valueList` data. A `.portalMetaData` object is included as well, but will be unique to your FileMaker schema. So you'll need to model that yourself.
 
 ```swift
 func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.Response? {
