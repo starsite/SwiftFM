@@ -20,7 +20,7 @@ This `README.md` is aimed at Swift devs who want to use the Data API in their UI
 
 ### 🖐 How To Help
 
-This was **a lot** of work, esp. the rewrite. If you'd like to support the SwiftFM project, you can:
+This was **a lot** of work, especcially the rewrite. If you'd like to support the SwiftFM project, you can:
 
 * Contribute socially, by giving SwiftFM a ⭐️ on GitHub or telling other people about it
 * Contribute [financially](https://paypal.me/starsite) (paypal.me/starsite)
@@ -30,7 +30,7 @@ This was **a lot** of work, esp. the rewrite. If you'd like to support the Swift
 
 ### ✅ Async/await
 
-SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can either download the old version of SwiftFM or fork this repo and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [presentation](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, you can fork this repo and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [presentation](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
 
 ---
 
@@ -184,7 +184,7 @@ if let token = await SwiftFM.newSession() {
 
 ### ✅ Validate Session (function) -> Bool
 
-FileMaker Data API 19 or later. Returns a `Bool`. This function isn't terribly helpful by itself. It's most helpful when used to wrap *other* calls, so you can assure they'll fire with a valid `token`. 
+FileMaker Data API 19 or later. Returns a `Bool`. This function isn't terribly helpful by itself. It's most helpful when used to wrap other calls, to ensure they'll be fired with a valid `token`. 
 
 ```swift
 func validateSession(token: String) async -> Bool {
@@ -711,7 +711,7 @@ func getRecords(layout: String,
 
 ✨ I'm including a **complete SwiftUI example** this time, showing the `model`, `view`, and a `fetchArtists(token:)` method. For those unfamiliar with SwiftUI, it's helpful to start in the middle of the example code and work your way out. Here's the gist:
 
-There is a `.task` on `List` which will return data (async) from FileMaker. I'm using that to set our `@State var artists` array. Anytime a `@State` property is modified, any view depending on it will be called again. In our case, this recalls `body`, refreshing `List` with our record data. Neat.
+There is a `.task` on `List` which will return data (async) from FileMaker. I'm using that to set our `@State var artists` array. When a `@State` property is modified, any view depending on it will be called again. In our case, this recalls `body`, refreshing `List` with our record data. Neat.
 
 ```swift
 // model
@@ -844,7 +844,7 @@ self.artists = record  // set data source
 
 ### Set Globals (function) -> Bool
 
-FileMaker Data API 18 or later. Returns a `Bool`. This call requires a `[String: Any]` object with a `globalFields` key.
+FileMaker Data API 18 or later. Returns a `Bool`. Make this call with a `[String: Any]` object containing a `globalFields` key.
 
 
 ```swift
@@ -993,7 +993,7 @@ func getDatabases() async -> [FMDatabases.Database]? {
 
 #### Example
 
-This call doesn't require a token
+This call doesn't require a token.
 
 ```swift
 guard let databases = await SwiftFM.getDatabases() else { return }
@@ -1071,7 +1071,7 @@ folders.forEach { folder in
 
 ### Get Layout Metadata (function) -> .response?
 
-FileMaker Data API 18 or later. Returns an optional `.response` object, containing `.fields` and `.valueList` data.
+FileMaker Data API 18 or later. Returns an optional `.response` object, containing `.fields` and `.valueList` data. A `.portalMetaData` object is be part of the `.response` as well, but will be unique to your FileMaker schema. So you'll need to model that yourself.
 
 ```swift
 func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.Response? {
@@ -1251,7 +1251,7 @@ func executeScript(script: String, parameter: String?, layout: String, token: St
 
 #### Example
 
-`Script` and `parameter` values are `.urlEncoded`, so spaces and such are ok (if you must).
+`Script` and `parameter` values are `.urlEncoded`, so spaces and such are ok.
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
