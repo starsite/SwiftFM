@@ -884,7 +884,7 @@ func setGlobals(payload: [String: Any], token: String) async -> Bool {
 
 #### Example
 
-Unlike `createRecord()` and `editRecord()`, global fields must be set using fully qualified field names, ie. `table name::field name`. Also, note our result here is a `Bool` and doesn't need to be unwrapped.
+⚠️ Note: Global fields must be set using fully qualified field names, ie. `table name::field name`. Also note that our result is a `Bool` and doesn't need to be unwrapped.
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
