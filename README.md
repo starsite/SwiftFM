@@ -134,7 +134,7 @@ struct MyApp: App {
 
 Returns an optional `token`.
 
-As mentioned, these calls use Swift's new `async`/`await` behavior. This is safer than completion blocks for myriad reasons (in addition to being more readable). If `newSession()` fails due to an incorrect username or password, it will return a FileMaker Data API error `code` and `message` to the console. All SwiftFM calls that reach FileMaker Server will log either a simple success message or error.
+If this fails due to an incorrect `Authorization` header, the FileMaker Data API will return an error `code` and `message` to the console. All SwiftFM calls will output a simple success message or error.
 
 ```swift
 func newSession() async -> String? {
