@@ -134,7 +134,7 @@ struct MyApp: App {
 
 Returns an optional `token`.
 
-If this fails due to an incorrect `Authorization` header, the FileMaker Data API will return an error `code` and `message` to the console. All SwiftFM calls will output a simple success message or error.
+If this fails due to an incorrect `Authorization`, the FileMaker Data API will return an error `code` and `message` to the console. All SwiftFM calls output a simple success message or error.
 
 ```swift
 func newSession() async -> String? {
