@@ -711,7 +711,7 @@ func getRecords(layout: String,
 
 #### Example (SwiftUI)
 
-✨ I'm including a **complete SwiftUI example** this time, showing the `model`, `view`, and a `fetchArtists(token:)` method. For those unfamiliar with SwiftUI, it's helpful to start in the middle of the example code and work your way out. Here's the gist:
+✨ I'm including a complete SwiftUI example this time, showing the `model`, `view`, and a `fetchArtists(token:)` method. For those unfamiliar with SwiftUI, it's helpful to start in the middle of the example code and work your way out. Here's the gist:
 
 There is a `.task` on `List` which will return data (async) from FileMaker. I'm using that to set our `@State var artists` array. When a `@State` property is modified, any view depending on it will be called again. In our case, this recalls `body`, refreshing `List` with our record data. Neat.
 
@@ -767,7 +767,7 @@ struct ContentView: View {
     // fetch 20 artists
     func fetchArtists(token: String) async {
 
-        let (data, _) = await SwiftFM.getRecords(layout: "Artists", limit: 20, sortField: "full_name", ascending: true, portal: nil, token: token)
+        let (data, _) = await SwiftFM.getRecords(layout: "Artists", limit: 20, sortField: "name", ascending: true, portal: nil, token: token)
 
         guard   let data = data,
                 let records = try? JSONDecoder().decode([Artist.Record].self, from: data) else { return }
