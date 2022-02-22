@@ -1,6 +1,6 @@
 # SwiftFM
 
-SwiftFM is a Swift framework for the FileMaker Data API (Swift 5.5, iOS 15 required).
+SwiftFM is a Swift framework for the FileMaker Data API (Swift 5.5, iOS 15 required). It utilizes modern Swift features like `async/await` and includes `Codable` type-safe returns.
 
 This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function shown below is paired with a code example.
 
@@ -32,7 +32,7 @@ This was **a lot** of work, especially the rewrite. If you'd like to support the
 
 ### ✅ Async/await
 
-SwiftFM was rewritten to use modern Swift features like `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, skip SPM and download the repo instead, and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+SwiftFM was rewritten this year to use `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, skip SPM and download the repo instead, and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
 
 ---
 
