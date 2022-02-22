@@ -491,7 +491,7 @@ func editRecord(id: Int, layout: String, payload: [String: Any], token: String) 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
-payload = ["fieldData": [
+let payload = ["fieldData": [
     "firstName": "Brian",
     "lastName": "Hamm"
 ]]
@@ -616,13 +616,13 @@ Note the difference in payload between an "or" request vs. an "and" request.
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 // find artists named Brian or Geoff
-payload = ["query": [
+let payload = ["query": [
     ["firstName": "Brian"],
     ["firstName": "Geoff"]
 ]]
 
 // find artists named Brian in Dallas
-payload = ["query": [
+let payload = ["query": [
     ["firstName": "Brian", "city": "Dallas"]
 ]]
 
@@ -892,7 +892,7 @@ func setGlobals(payload: [String: Any], token: String) async -> Bool {
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
-payload = ["globalFields": [
+let payload = ["globalFields": [
     "baseTable::gField": "newValue",
     "baseTable::gField2": "newValue"
 ]]
