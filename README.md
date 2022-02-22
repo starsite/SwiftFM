@@ -493,12 +493,12 @@ func editRecord(id: Int, layout: String, payload: [String: Any], token: String) 
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
-
 payload = ["fieldData": [
     "firstName": "Brian",
     "lastName": "Hamm"
 ]]
+
+let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 if let modId = await SwiftFM.editRecord(id: 123, layout: "Artists", payload: payload, token: token) {
     print("updated modId: \(modId)")
@@ -617,6 +617,8 @@ func query(layout: String, payload: [String: Any], token: String) async -> (Data
 Note the difference in payload between an "or" request vs. an "and" request. 
 
 ```swift
+let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+
 // find artists named Brian or Geoff
 payload = ["query": [
     ["firstName": "Brian"],
@@ -627,8 +629,6 @@ payload = ["query": [
 payload = ["query": [
     ["firstName": "Brian", "city": "Dallas"]
 ]]
-
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 let (data, _) = await SwiftFM.query(layout: "Artists", payload: payload, token: token)
 
@@ -954,8 +954,7 @@ This call doesn't require a token.
 ```swift
 guard let info = await SwiftFM.getProductInfo() else { return }
 
-print(info.version)
-// there are also properties for .name .buildDate, .dateFormat, .timeFormat, and .timeStampFormat
+print(info.version)  // there are also properties for .name .buildDate, .dateFormat, .timeFormat, and .timeStampFormat
 ```
 
 ------
