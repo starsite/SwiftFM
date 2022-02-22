@@ -4,7 +4,7 @@ SwiftFM is a Swift framework for the FileMaker Data API (Swift 5.5, iOS 15 requi
 
 This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function shown below is paired with a code example.
 
-SwiftFM is **in no way** related to the FIleMaker iOS App SDK (ick).
+SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ---
 
@@ -12,10 +12,10 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK (ick).
 
 * Xcode -> File -> Add Packages
 * `https://github.com/starsite/SwiftFM.git`
-* **Swift**: Set your enivronment vars in `applicationWillEnterForeground(_:)`
-* **SwiftUI**: Set your enivronment vars in `MyApp.init()`
+* **Swift**: Set your enivronment in `applicationWillEnterForeground(_:)`
+* **SwiftUI**: Set your enivronment in `MyApp.init()`
+* Add an `import SwiftFM` statement
 * Call `SwiftFM.newSession()` and get a token ✨
-* Make Swift calls to your FileMaker database
 * Woot!
 
 ---
