@@ -81,8 +81,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UserDefaults.standard.set(host, forKey: "fm-host")
         UserDefaults.standard.set(db, forKey: "fm-db")
-        UserDefaults.standard.set(user, forKey: "fm-user")
-        UserDefaults.standard.set(pass, forKey: "fm-pass")
         
         let str = "\(user):\(pass)"
         
@@ -112,8 +110,6 @@ struct MyApp: App {
 
         UserDefaults.standard.set(host, forKey: "fm-host")
         UserDefaults.standard.set(db, forKey: "fm-db")
-        UserDefaults.standard.set(user, forKey: "fm-user")
-        UserDefaults.standard.set(pass, forKey: "fm-pass")
         
         let str = "\(user):\(pass)"
         
