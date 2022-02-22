@@ -2,7 +2,7 @@
 
 SwiftFM is a Swift framework for the FileMaker Data API (Swift 5.5, iOS 15 required).
 
-This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function is paired with a code example.
+This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function shown below is paired with a code example.
 
 SwiftFM is **in no way** related to the FIleMaker iOS App SDK (ick).
 
@@ -233,7 +233,7 @@ case true:
 
 case false:
     if let newToken = await SwiftFM.newSession() {
-        await fetchArtists(token: newToken)
+       await fetchArtists(token: newToken)
     }       
 }
 ```
@@ -245,7 +245,7 @@ case false:
 
 Returns a `Bool`. For standard Swift (UIKit) apps, a good place to call this would be `applicationDidEnterBackground(_:)`. For SwiftUI apps, you should call it inside a `\.scenePhase.background` switch. 
 
-The FileMaker Data API has a 500-session limit, so managing session tokens is especially important for larger deployments. If you don't delete your session token, it ~~will~~ _should_ expire 15 minutes after the last API call. Probably. But you should clean up after yourself and not assume this will happen. 🙂
+FileMaker's Data API has a 500-session limit, so managing session tokens will be important for larger deployments. If you don't delete your session token, it ~~will~~ *should* expire 15 minutes after the last API call. Probably. But you should clean up after yourself and not assume this will happen. 🙂
 
 ```swift
 func deleteSession(token: String, completion: @escaping (Bool) -> Void) {
@@ -387,7 +387,7 @@ let payload = ["fieldData": [  // required key
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 if let recordId = await SwiftFM.createRecord(layout: "Artists", payload: payload, token: token) {
-    self.result = "created record: \(recordId)"  
+    print("created record: \(recordId)")
 }
 ```
 
@@ -550,11 +550,12 @@ func deleteRecord(id: Int, layout: String, token: String) async -> Bool {
 
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let recordId = 123456
 
-let result = await SwiftFM.deleteRecord(id: 1234567890, layout: "Artists", token: token)
+let result = await SwiftFM.deleteRecord(id: recordId, layout: "Artists", token: token)
     
 if result == true {
-    print("deleted record")
+    print("deleted recordId \(recordId)")
 }
 ```
 
@@ -562,7 +563,9 @@ if result == true {
 
 ### 🔍 Query (function) -> ([record]?, .dataInfo?)
 
-Returns an optional `records` array and `dataInfo` response. You can set your `payload` from the UI, or hardcode a query. Then pass it as a `[String: Any]` object with a `query` key.
+Returns an optional `records` array and `dataInfo` response. This is our first function that returns a **tuple**. You can use either object (or both). The `dataInfo` object includes metadata about the request (database, layout, and table; as well as record count values for total, found, and returned). If you want to ignore `dataInfo`, you can assign it an underscore.
+
+You can set your `payload` from the UI, or hardcode a query. Then pass it as a `[String: Any]` object with a `query` key.
 
 ```swift
 func query(layout: String, payload: [String: Any], token: String) async -> (Data?, Data?) {
@@ -639,7 +642,7 @@ self.artists = records  // set @State data source
 
 ### Get Records (function) -> ([record]?, .dataInfo?)
 
-Returns an optional array of `records` and `dataInfo` response. This is our first function that returns a **tuple**. You can use either object (or both). The second object, `dataInfo`, includes metadata about the request (database, layout, and table; as well as count values for total, found, and returned). If you want to ignore `dataInfo`, you can assign it an underscore.
+Returns an optional array of `records` and `dataInfo` response. All of the SwiftFM record fetching methods return tuples.
 
 ```swift
 func getRecords(layout: String,
@@ -766,7 +769,7 @@ struct ContentView: View {
     // ...
 
     // fetch 20 artists
-    func fetchArtists(token: String) {
+    func fetchArtists(token: String) async {
 
         let (data, _) = await SwiftFM.getRecords(layout: "Artists", limit: 20, sortField: "full_name", ascending: true, portal: nil, token: token)
 
@@ -784,7 +787,7 @@ struct ContentView: View {
 
 ### Get Record (function) -> (record?, .dataInfo?)
 
-Returns an optional `record` and `dataInfo` response. All the SwiftFM record fetching methods return tuples.
+Returns an optional `record` and `dataInfo` response.
 
 ```swift
 func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
@@ -952,7 +955,6 @@ This call doesn't require a token.
 guard let info = await SwiftFM.getProductInfo() else { return }
 
 print(info.version)
-
 // there are also properties for .name .buildDate, .dateFormat, .timeFormat, and .timeStampFormat
 ```
 
