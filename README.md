@@ -229,11 +229,11 @@ let isValid = await SwiftFM.validateSession(token: token)
 
 switch isValid {
 case true:
-    await fetchArtists(token: token)
+    fetchArtists(token: token)
 
 case false:
     if let newToken = await SwiftFM.newSession() {
-       await fetchArtists(token: newToken)
+       fetchArtists(token: newToken)
     }       
 }
 ```
@@ -378,13 +378,13 @@ func createRecord(layout: String, payload: [String: Any]?, token: String) async 
 #### Example
 
 ```swift
+let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+
 let payload = ["fieldData": [  // required key
     "firstName": "Brian",
     "lastName": "Hamm",
     "email": "hello@starsite.co"
 ]]
-
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 if let recordId = await SwiftFM.createRecord(layout: "Artists", payload: payload, token: token) {
     print("created record: \(recordId)")
@@ -493,12 +493,12 @@ func editRecord(id: Int, layout: String, payload: [String: Any], token: String) 
 #### Example
 
 ```swift
+let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+
 payload = ["fieldData": [
     "firstName": "Brian",
     "lastName": "Hamm"
 ]]
-
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
 if let modId = await SwiftFM.editRecord(id: 123, layout: "Artists", payload: payload, token: token) {
     print("updated modId: \(modId)")
