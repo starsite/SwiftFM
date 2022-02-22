@@ -12,7 +12,7 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 * Xcode -> File -> Add Packages
 * `https://github.com/starsite/SwiftFM.git`
-* **Swift**: Set your enivronment in `applicationWillEnterForeground(_:)`
+* **UIKit**: Set your enivronment in `applicationWillEnterForeground(_:)`
 * **SwiftUI**: Set your enivronment in `MyApp.init()`
 * Add an `import SwiftFM` statement
 * Call `SwiftFM.newSession()` and get a token ✨
