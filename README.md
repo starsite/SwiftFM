@@ -10,9 +10,9 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ### 👉 v2.2.0
 
-`query()`, `getRecord()`, and `getRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping the result. Not ideal. Starting with 2.2.0, record fetching methods `throw` and return `(Data, DataInfo)`. This means:
+`query()`, `getRecord()`, and `getRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping the result. Not ideal. Starting with 2.2.0, record fetching methods `throw` and will return `(Data, DataInfo)`. This means:
 
-* You no longer need the extra `let (data, info) =` call prior to unwrapping either object.
+* You no longer need the extra `let (data, info)` call prior to unwrapping either object.
 * You can now 'dot' directly into `info`, like this: `print("fetched \(info.returnedCount) records")`.
 
 If I were using SwiftFM as a third party dev, I'd want it to behave like `URLSession`. Now it does.
