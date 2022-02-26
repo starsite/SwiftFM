@@ -177,16 +177,16 @@ open class SwiftFM {
     
     
     
-    // MARK: - query -> ([record]?, dataInfo?)
+    // MARK: - query -> ([record], .dataInfo)
     
-    open class func query(layout: String, payload: [String: Any], token: String) async -> (Data?, Data?) {
+    open class func query(layout: String, payload: [String: Any], token: String) async throws -> (Data, FMResult.DataInfo) {
                 
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
                 let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/_find"),
                 let body = try? JSONSerialization.data(withJSONObject: payload)
         
-        else { return (nil, nil) }
+        else { throw FMError.jsonSerialization }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -196,29 +196,29 @@ open class SwiftFM {
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
                 let response  = json["response"] as? [String: Any],
                 let messages  = json["messages"] as? [[String: Any]],
                 let message   = messages[0]["message"] as? String,
                 let code      = messages[0]["code"] as? String
         
-        else { return (nil, nil) }
+        else { throw FMError.sessionResponse }
             
         // return
         switch code {
         case "0":
             guard  let data     = response["data"] as? [[String: Any]],
-                   let dataInfo = response["dataInfo"] as? [String: Any],
                    let records  = try? JSONSerialization.data(withJSONObject: data),
-                   let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
+                   let dataInfo = result.response.dataInfo
+
+            else { throw FMError.jsonSerialization }
             
-            else { return (nil, nil) }
-            
-            print("fetched \(data.count) records")
-            return (records, info)
+            print("fetched \(dataInfo.foundCount) records")
+            return (records, dataInfo)
             
         default:
             print(message)
-            return (nil, nil)
+            throw FMError.nonZeroCode
         }
     }
     
@@ -227,14 +227,14 @@ open class SwiftFM {
     
     
     
-    // MARK: - get records -> ([record]?, dataInfo?)
+    // MARK: - get records -> ([record], .dataInfo)
     
     open class func getRecords(layout: String,
                                limit: Int,
                                sortField: String,
                                ascending: Bool,
                                portal: String?,
-                               token: String) async -> (Data?, Data?) {
+                               token: String) async throws -> (Data, FMResult.DataInfo) {
         
         
         // param str
@@ -255,15 +255,12 @@ open class SwiftFM {
         
         // encoding
         guard   let sortEnc   = sortJson.urlEncoded,
-                let portalEnc = portalJson.urlEncoded else { return (nil, nil) }
+                let portalEnc = portalJson.urlEncoded,
+                let host      = UserDefaults.standard.string(forKey: "fm-host"),
+                let db        = UserDefaults.standard.string(forKey: "fm-db"),
+                let url       = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)")
         
-
-        // url
-        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-                let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)")
-        
-        else { return (nil, nil) }
+        else { throw FMError.urlEncoding }
         
         
         // request
@@ -274,30 +271,30 @@ open class SwiftFM {
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
                 let response  = json["response"] as? [String: Any],
                 let messages  = json["messages"] as? [[String: Any]],
                 let message   = messages[0]["message"] as? String,
                 let code      = messages[0]["code"] as? String
                     
-        else { return (nil, nil) }
+        else { throw FMError.sessionResponse }
         
         
         // return
         switch code {
         case "0":
             guard  let data     = response["data"] as? [[String: Any]],
-                   let dataInfo = response["dataInfo"] as? [String: Any],
                    let records  = try? JSONSerialization.data(withJSONObject: data),
-                   let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
-                    
-            else { return (nil, nil) }
+                   let dataInfo = result.response.dataInfo
+
+            else { throw FMError.jsonSerialization }
             
-            print("fetched \(data.count) records")
-            return (records, info)
+            print("fetched \(dataInfo.foundCount) records")
+            return (records, dataInfo)
             
         default:
             print(message)
-            return (nil, nil)
+            throw FMError.nonZeroCode
         }
     }
 
@@ -306,15 +303,15 @@ open class SwiftFM {
     
     
     
-    // MARK: - get record id -> ([record]?, dataInfo?)
+    // MARK: - get record id -> (record, .dataInfo)
     
-    open class func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
+    open class func getRecord(id: Int, layout: String, token: String) async throws -> (Data, FMResult.DataInfo) {
         
         guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
                 let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)") else {
-                    
-        return (nil, nil) }
+                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)")
+        
+        else { throw FMError.urlEncoding }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -323,30 +320,30 @@ open class SwiftFM {
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
                 let response  = json["response"] as? [String: Any],
                 let messages  = json["messages"] as? [[String: Any]],
                 let message   = messages[0]["message"] as? String,
                 let code      = messages[0]["code"] as? String
                     
-        else { return (nil, nil) }
+        else { throw FMError.sessionResponse }
         
         // return
         switch code {
         case "0":
             guard  let data     = response["data"] as? [[String: Any]],
                    let data0    = data.first,
-                   let dataInfo = response["dataInfo"] as? [String: Any],
                    let record   = try? JSONSerialization.data(withJSONObject: data0),
-                   let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
-                    
-            else { return (nil, nil) }
+                   let dataInfo = result.response.dataInfo
+
+            else { throw FMError.jsonSerialization }
             
             print("fetched recordId: \(id)")
-            return (record, info)
+            return (record, dataInfo)
             
         default:
             print(message)
-            return (nil, nil)
+            throw FMError.nonZeroCode
         }
     }
     
@@ -890,8 +887,24 @@ open class SwiftFM {
         }
     }
     
+    
+    
+    
+    
+    
+    // MARK: - throwing errors
+    
+    enum FMError: Error {
+        case jsonSerialization
+        case urlEncoding
+        case sessionResponse
+        case nonZeroCode
+    }
+
+    
 
     
 }  // .SwiftFM 😘
+
 
 

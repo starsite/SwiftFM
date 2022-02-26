@@ -8,6 +8,17 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ---
 
+### 🚨 2.2.0
+
+Pardon the quick update. The return types for `Query()`, `GetRecord()`, and `GetRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping either result. Not ideal. All 3 record fetching methods now `throw` and return `(Data, DataInfo)`. This means:
+
+* You no longer need an extra `let (data, resp) =` call prior to unwrapping `data` (or `resp`).
+* You can now 'dot' directly into `resp`, like this: `print("fetched \(resp.foundCount) records")`
+
+If I were using this framework as a 3rd party, I'd want/expect it work like a `URLSession` call. Now it does. 😘
+
+---
+
 ### 🗳 How To Use
 
 * Xcode -> File -> Add Packages
