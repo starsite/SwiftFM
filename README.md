@@ -8,14 +8,14 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ---
 
-### ⚠️ v2.2.0
+### 👉 v2.2.0
 
-`Query()`, `GetRecord()`, and `GetRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping either result. Not ideal. All record fetching methods now `throw` and return `(Data, DataInfo)`. This means:
+`Query()`, `GetRecord()`, and `GetRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping the result. Not ideal. Record fetching methods now `throw` and return `(Data, DataInfo)`. This means:
 
-* You no longer need an extra `let (data, info) =` call prior to unwrapping `data` or `info`.
-* You can now 'dot' directly into `info`, like this: `print("fetched \(info.foundCount) records")`.
+* You no longer need an extra `let (data, info) =` call prior to unwrapping either object.
+* You can now 'dot' directly into `info`, like this: `print("fetched \(info.returnedCount) records")`.
 
-If I were using SwiftFM as an end user, I'd want/expect it work more like a `URLSession` call. Now it does. 😘
+If I were using SwiftFM as an end user, I'd want/expect it work more like a `URLSession` call. Now it does.
 
 ---
 
@@ -649,7 +649,7 @@ self.artists = records  // set @State data source
 
 ### Get Records (function) -> ([record], .dataInfo)
 
-Returns a`record` array and `dataInfo` response. All of the SwiftFM record fetching methods return tuples.
+Returns a `record` array and `dataInfo` response. All SwiftFM record fetching methods return a tuple.
 
 ```swift
 func getRecords(layout: String,
