@@ -15,7 +15,7 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 * You no longer need an extra `let (data, info) =` call prior to unwrapping either object.
 * You can now 'dot' directly into `info`, like this: `print("fetched \(info.returnedCount) records")`.
 
-If I were using SwiftFM as an end user, I'd want/expect it to work more like a `URLSession` call. Now it does.
+If I were using SwiftFM as an end user, I'd want it to work more like a `URLSession` call. Now it does.
 
 ---
 
