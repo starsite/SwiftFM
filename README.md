@@ -8,14 +8,14 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ---
 
-### 🚨 2.2.0
+### ⚠️ v2.2.0
 
-Pardon the quick update. The return types for `Query()`, `GetRecord()`, and `GetRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping either result. Not ideal. All 3 record fetching methods now `throw` and return `(Data, DataInfo)`. This means:
+`Query()`, `GetRecord()`, and `GetRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping either result. Not ideal. All record fetching methods now `throw` and return `(Data, DataInfo)`. This means:
 
-* You no longer need an extra `let (data, resp) =` call prior to unwrapping `data` (or `resp`).
-* You can now 'dot' directly into `resp`, like this: `print("fetched \(resp.foundCount) records")`
+* You no longer need an extra `let (data, info) =` call prior to unwrapping `data` (or `info`).
+* You can now 'dot' directly into `info`, like this: `print("fetched \(info.foundCount) records")`.
 
-If I were using this framework as a 3rd party, I'd want/expect it work like a `URLSession` call. Now it does. 😘
+If I were using this framework as an end user, I'd want/expect it work more like a `URLSession` call. Now it does. 😘
 
 ---
 
@@ -568,53 +568,53 @@ if result == true {
 
 ------
 
-### 🔍 Query (function) -> ([record]?, .dataInfo?)
+### 🔍 Query (function) -> ([record], .dataInfo)
 
-Returns an optional `records` array and `dataInfo` response. This is our first function that returns a **tuple**. You can use either object (or both). The `dataInfo` object includes metadata about the request (database, layout, and table; as well as record count values for total, found, and returned). If you want to ignore `dataInfo`, you can assign it an underscore.
+Returns a `record` array and `dataInfo` response. This is our first function that returns a **tuple**. You can use either object (or both). The `dataInfo` object includes metadata about the request (database, layout, and table; as well as record count values for total, found, and returned). If you want to ignore `dataInfo`, you can assign it an underscore.
 
 You can set your `payload` from the UI, or hardcode a query. Then pass it as a `[String: Any]` object with a `query` key.
 
 ```swift
-func query(layout: String, payload: [String: Any], token: String) async -> (Data?, Data?) {
-
+func query(layout: String, payload: [String: Any], token: String) async throws -> (Data, FMResult.DataInfo) {
+            
     guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
             let db   = UserDefaults.standard.string(forKey: "fm-db"),
             let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/_find"),
             let body = try? JSONSerialization.data(withJSONObject: payload)
-
-    else { return (nil, nil) }
-
+    
+    else { throw FMError.jsonSerialization }
+    
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.httpBody = body
-
+    
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
             let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
             let response  = json["response"] as? [String: Any],
             let messages  = json["messages"] as? [[String: Any]],
             let message   = messages[0]["message"] as? String,
             let code      = messages[0]["code"] as? String
-
-    else { return (nil, nil) }
-
+    
+    else { throw FMError.sessionResponse }
+        
     // return
     switch code {
     case "0":
-        guard  let data     = response["data"] as? [[String: Any]],
-               let dataInfo = response["dataInfo"] as? [String: Any],
-               let records  = try? JSONSerialization.data(withJSONObject: data),
-               let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
+        guard   let data     = response["data"] as? [[String: Any]],
+                let records  = try? JSONSerialization.data(withJSONObject: data),
+                let dataInfo = result.response.dataInfo
 
-        else { return (nil, nil) }
-
-        print("fetched \(data.count) records")
-        return (records, info)
-
+        else { throw FMError.jsonSerialization }
+        
+        print("fetched \(dataInfo.foundCount) records")
+        return (records, dataInfo)
+        
     default:
         print(message)
-        return (nil, nil)
+        throw FMError.nonZeroCode
     }
 }
 ```
@@ -637,85 +637,87 @@ let payload = ["query": [
     ["firstName": "Brian", "city": "Dallas"]
 ]]
 
-let (data, _) = await SwiftFM.query(layout: "Artists", payload: payload, token: token)
-
-guard   let data = data,
-        let records = try? JSONDecoder().decode([Artist.Record].self, from: data) else { return }
+guard   let (data, _) = try? await SwiftFM.query(layout: "Artists", payload: payload, token: token),
+        let records   = try? JSONDecoder().decode([Artist.Record].self, from: data) 
+        
+else { return }
 
 self.artists = records  // set @State data source
 ```
 
 ---
 
-### Get Records (function) -> ([record]?, .dataInfo?)
+### Get Records (function) -> ([record], .dataInfo)
 
-Returns an optional array of `records` and `dataInfo` response. All of the SwiftFM record fetching methods return tuples.
+Returns a`record` array and `dataInfo` response. All of the SwiftFM record fetching methods return tuples.
 
 ```swift
 func getRecords(layout: String,
                 limit: Int,
                 sortField: String,
-                ascending: Bool, 
-                portal: String?, 
-                token: String) async -> (Data?, Data?) {
-
+                ascending: Bool,
+                portal: String?,
+                token: String) async throws -> (Data, FMResult.DataInfo) {
+    
+    
     // param str
     let order = ascending ? "ascend" : "descend"
-
+    
     let sortJson = """
     [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
     """
-
-    var portalJson = "[]"     // if nil portal
-
-    if let portal = portal {  // else
+    
+    var portalJson = "[]"
+    
+    if let portal = portal {  // non nil
         portalJson = """
         ["\(portal)"]
         """
     }
-
+            
+    
     // encoding
     guard   let sortEnc   = sortJson.urlEncoded,
-            let portalEnc = portalJson.urlEncoded else { return (nil, nil) }
-
-    // url
-    guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-            let db   = UserDefaults.standard.string(forKey: "fm-db"),
-            let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)")
-
-    else { return (nil, nil) }
-
+            let portalEnc = portalJson.urlEncoded,
+            let host      = UserDefaults.standard.string(forKey: "fm-host"),
+            let db        = UserDefaults.standard.string(forKey: "fm-db"),
+            let url       = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/?_limit=\(limit)&_sort=\(sortEnc)&portal=\(portalEnc)")
+    
+    else { throw FMError.urlEncoding }
+    
+    
     // request
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+    
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
             let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
             let response  = json["response"] as? [String: Any],
             let messages  = json["messages"] as? [[String: Any]],
             let message   = messages[0]["message"] as? String,
             let code      = messages[0]["code"] as? String
-
-    else { return (nil, nil) }
-
+                
+    else { throw FMError.sessionResponse }
+    
+    
     // return
     switch code {
     case "0":
         guard  let data     = response["data"] as? [[String: Any]],
-               let dataInfo = response["dataInfo"] as? [String: Any],
                let records  = try? JSONSerialization.data(withJSONObject: data),
-               let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
+               let dataInfo = result.response.dataInfo
 
-        else { return (nil, nil) }
-
-        print("fetched \(data.count) records")
-        return (records, info)
-
+        else { throw FMError.jsonSerialization }
+        
+        print("fetched \(dataInfo.foundCount) records")
+        return (records, dataInfo)
+        
     default:
         print(message)
-        return (nil, nil)
+        throw FMError.nonZeroCode
     }
 }
 ```
@@ -778,10 +780,10 @@ struct ContentView: View {
     // fetch 20 artists
     func fetchArtists(token: String) async {
 
-        let (data, _) = await SwiftFM.getRecords(layout: "Artists", limit: 20, sortField: "name", ascending: true, portal: nil, token: token)
-
-        guard   let data = data,
-                let records = try? JSONDecoder().decode([Artist.Record].self, from: data) else { return }
+        guard   let (data, _) = try? await SwiftFM.getRecords(layout: "Artists", limit: 20, sortField: "name", ascending: true, portal: nil, token: token)
+                let records   = try? JSONDecoder().decode([Artist.Record].self, from: data) 
+                
+        else { return }
 
         self.artists = records  // sets our @State artists array 👆
     }
@@ -792,50 +794,50 @@ struct ContentView: View {
 - - -
 
 
-### Get Record (function) -> (record?, .dataInfo?)
+### Get Record (function) -> (record, .dataInfo)
 
-Returns an optional `record` and `dataInfo` response.
+Returns a `record` and `dataInfo` response.
 
 ```swift
-func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
-
+func getRecord(id: Int, layout: String, token: String) async throws -> (Data, FMResult.DataInfo) {
+    
     guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
             let db   = UserDefaults.standard.string(forKey: "fm-db"),
-            let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)") else {
-
-    return (nil, nil) }
-
+            let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/records/\(id)")
+    
+    else { throw FMError.urlEncoding }
+    
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
+    
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
             let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+            let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
             let response  = json["response"] as? [String: Any],
             let messages  = json["messages"] as? [[String: Any]],
             let message   = messages[0]["message"] as? String,
             let code      = messages[0]["code"] as? String
-
-    else { return (nil, nil) }
-
+                
+    else { throw FMError.sessionResponse }
+    
     // return
     switch code {
     case "0":
         guard  let data     = response["data"] as? [[String: Any]],
                let data0    = data.first,
-               let dataInfo = response["dataInfo"] as? [String: Any],
                let record   = try? JSONSerialization.data(withJSONObject: data0),
-               let info     = try? JSONSerialization.data(withJSONObject: dataInfo)
+               let dataInfo = result.response.dataInfo
 
-        else { return (nil, nil) }
-
+        else { throw FMError.jsonSerialization }
+        
         print("fetched recordId: \(id)")
-        return (record, info)
-
+        return (record, dataInfo)
+        
     default:
         print(message)
-        return (nil, nil)
+        throw FMError.nonZeroCode
     }
 }
 ```
@@ -845,10 +847,10 @@ func getRecord(id: Int, layout: String, token: String) async -> (Data?, Data?) {
 ```swift
 let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 
-let (data, _) = await SwiftFM.getRecord(id: 123, layout: "Artists", token: token)
-
-guard let data = data,
-      let record = try? JSONDecoder().decode(Artist.Record.self, from: data) else { return }
+guard   let (data, _) = try? await SwiftFM.getRecord(id: 123, layout: "Artists", token: token),
+        let record    = try? JSONDecoder().decode(Artist.Record.self, from: data) 
+        
+else { return }
 
 self.artist = record
 ```
