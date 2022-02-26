@@ -213,7 +213,7 @@ open class SwiftFM {
 
             else { throw FMError.jsonSerialization }
             
-            print("fetched \(dataInfo.foundCount) records")
+            print("fetched \(data.count) records")
             return (records, dataInfo)
             
         default:
@@ -289,7 +289,7 @@ open class SwiftFM {
 
             else { throw FMError.jsonSerialization }
             
-            print("fetched \(dataInfo.foundCount) records")
+            print("fetched \(data.count) records")
             return (records, dataInfo)
             
         default:
