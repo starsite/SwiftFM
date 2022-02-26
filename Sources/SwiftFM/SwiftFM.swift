@@ -90,52 +90,14 @@ open class SwiftFM {
         }
     }
     
-    
-    
-    
-    
-        
-//    // ❌ we can't use this for .scenePhase.background in SwiftUI... use the @escaping method below
-//
-//    open class func deleteSession(token: String) async -> Bool {
-//
-//        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-//                let db   = UserDefaults.standard.string(forKey: "fm-db"),
-//                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/sessions/\(token)")
-//
-//        else { return false }
-//
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "DELETE"
-//
-//        guard   let (data, _) = try? await URLSession.shared.data(for: request),
-//                let result    = try? JSONDecoder().decode(FMSession.Result.self, from: data),
-//                let message   = result.messages.first
-//
-//        else { return false }
-//
-//        // return
-//        switch message.code {
-//        case "0":
-//            UserDefaults.standard.set(nil, forKey: "fm-token")
-    
-//            print("🔥 deleted token » \(token)")
-//            return true
-//
-//        default:
-//            print(message)
-//            return false
-//        }
-//    }
-    
-    
+
     
 
     
     
     // MARK: - delete session -> @escaping Bool
     
-    // ✅ we need an @escaping method for .scenePhase.background in SwiftUI
+    // we need an @escaping method for .scenePhase.background in SwiftUI
     
     open class func deleteSession(token: String, completion: @escaping (Bool) -> Void) {
         
@@ -358,7 +320,7 @@ open class SwiftFM {
         
         var fieldData: [String: Any] = ["fieldData": [:]]
         
-        if let payload = payload {
+        if let payload = payload {  // non nil
             fieldData = payload
         }
         
@@ -776,15 +738,10 @@ open class SwiftFM {
         
         // encoding
         guard   let scriptEnc = script.urlEncoded,
-                let paramEnc  = param.urlEncoded
-        
-        else { return false }
-        
-        
-        // url
-        guard   let host = UserDefaults.standard.string(forKey: "fm-host"),
-                let db   = UserDefaults.standard.string(forKey: "fm-db"),
-                let url  = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/script/\(scriptEnc)?script.param=\(paramEnc)")
+                let paramEnc  = param.urlEncoded,
+                let host      = UserDefaults.standard.string(forKey: "fm-host"),
+                let db        = UserDefaults.standard.string(forKey: "fm-db"),
+                let url       = URL(string: "https://\(host)/fmi/data/vLatest/databases/\(db)/layouts/\(layout)/script/\(scriptEnc)?script.param=\(paramEnc)")
                     
         else { return false }
         
