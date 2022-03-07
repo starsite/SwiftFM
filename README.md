@@ -1,6 +1,8 @@
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fstarsite%2FSwiftFM%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/starsite/SwiftFM) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fstarsite%2FSwiftFM%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/starsite/SwiftFM)
+
 # SwiftFM
 
-SwiftFM is a Swift framework for the FileMaker Data API (Swift 5.5, iOS 15 required). It utilizes modern Swift features like `async/await` and includes `Codable` type-safe returns.
+SwiftFM is a Swift framework for the FileMaker Data API. It uses modern Swift features like `async/await`, `Codable` type-safe returns, and contains extensive support for `DocC`.
 
 This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function shown below is paired with a code example.
 
@@ -15,7 +17,7 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 * You no longer need the extra `let (data, info)` call prior to unwrapping either object.
 * You can now 'dot' directly into `info`, like this: `print("fetched \(info.returnedCount) records")`.
 
-This behavior now more closely mimics `URLSession`, which should make it easier to use.
+This behavior more closely mimics a `URLSession` call, which should make it nicer to use.
 
 ---
 
