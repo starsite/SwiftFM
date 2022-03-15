@@ -673,7 +673,7 @@ func getRecords(layout: String,
     [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
     """
     
-    var portalJson = "[]"     // if nil portal
+    var portalJson = "[]"  // if nil portal
     
     if let portal = portal {  // else
         portalJson = """
@@ -761,7 +761,7 @@ struct ContentView: View {
         NavigationView {
           
             List(artists, id: \.recordId) { artist in
-                Text("\(artist.fieldData.name)")    // 🥰 type-safe, Codable properties
+                Text(artist.fieldData.name)    // 🥰 type-safe, Codable properties
             }
             .navigationTitle("Artists")
             .task {  // ✅ <-- start here
