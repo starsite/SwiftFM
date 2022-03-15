@@ -2,7 +2,7 @@
 
 # SwiftFM
 
-SwiftFM is a Swift framework for the FileMaker Data API. It uses modern Swift features like `async/await`, `Codable` type-safe returns, and contains extensive support for `DocC`.
+SwiftFM is a Swift framework for the FileMaker Data API. It uses modern Swift features like `async/await`, `Codable` type-safe returns, and has extensive support for `DocC`.
 
 This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function shown below is paired with a code example.
 
@@ -232,9 +232,7 @@ func validateSession(token: String) async -> Bool {
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
-
-let isValid = await SwiftFM.validateSession(token: token)
+let isValid = await SwiftFM.validateSession(token: "abcde12345xxxxx")
 
 switch isValid {
 case true:
@@ -387,7 +385,8 @@ func createRecord(layout: String, payload: [String: Any]?, token: String) async 
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let layout = "Artists"
 
 let payload = ["fieldData": [  // required key
     "firstName": "Brian",
@@ -395,7 +394,7 @@ let payload = ["fieldData": [  // required key
     "email": "hello@starsite.co"
 ]]
 
-if let recordId = await SwiftFM.createRecord(layout: "Artists", payload: payload, token: token) {
+if let recordId = await SwiftFM.createRecord(layout: layout, payload: payload, token: token) {
     print("created record: \(recordId)")
 }
 ```
@@ -445,9 +444,11 @@ func duplicateRecord(id: Int, layout: String, token: String) async -> String? {
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let recid  = 12345
+let layout = "Artists"
 
-if let recordId = await SwiftFM.duplicateRecord(id: 123, layout: "Artists", token: token) {
+if let recordId = await SwiftFM.duplicateRecord(id: recid, layout: layout, token: token) {
     print("new record: \(recordId)")
 }
 ```
@@ -502,14 +503,15 @@ func editRecord(id: Int, layout: String, payload: [String: Any], token: String) 
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let recid  = 12345
+let layout = "Artists"
 
 let payload = ["fieldData": [
-    "firstName": "Brian",
-    "lastName": "Hamm"
+    "address": "My updated address",
 ]]
 
-if let modId = await SwiftFM.editRecord(id: 123, layout: "Artists", payload: payload, token: token) {
+if let modId = await SwiftFM.editRecord(id: recid, layout: layout, payload: payload, token: token) {
     print("updated modId: \(modId)")
 }
 ```
@@ -558,10 +560,11 @@ func deleteRecord(id: Int, layout: String, token: String) async -> Bool {
 ⚠️ This is Swift, not FileMaker. Nothing will prevent this from firing—immediately. Put some kind of confirmation view in your app.
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
-let recordId = 123456
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let recid  = 12345
+let layout = "Artists"
 
-let result = await SwiftFM.deleteRecord(id: recordId, layout: "Artists", token: token)
+let result = await SwiftFM.deleteRecord(id: recid, layout: layout, token: token)
     
 if result == true {
     print("deleted recordId \(recordId)")
@@ -626,7 +629,8 @@ func query(layout: String, payload: [String: Any], token: String) async throws -
 Note the difference in payload between an "or" request vs. an "and" request. 
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let layout = "Artists"
 
 // find artists named Brian or Geoff
 let payload = ["query": [
@@ -639,7 +643,7 @@ let payload = ["query": [
     ["firstName": "Brian", "city": "Dallas"]
 ]]
 
-guard   let (data, _) = try? await SwiftFM.query(layout: "Artists", payload: payload, token: token),
+guard   let (data, _) = try? await SwiftFM.query(layout: layout, payload: payload, token: token),
         let records   = try? JSONDecoder().decode([Artist.Record].self, from: data) 
         
 else { return }
@@ -669,9 +673,9 @@ func getRecords(layout: String,
     [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
     """
     
-    var portalJson = "[]"
+    var portalJson = "[]"     // if nil portal
     
-    if let portal = portal {  // non nil
+    if let portal = portal {  // else
         portalJson = """
         ["\(portal)"]
         """
@@ -757,9 +761,7 @@ struct ContentView: View {
         NavigationView {
           
             List(artists, id: \.recordId) { artist in
-                VStack(alignment: .leading) {
-                    Text("\(artist.fieldData.name)")    // 🥰 type-safe, Codable properties
-                }
+                Text("\(artist.fieldData.name)")    // 🥰 type-safe, Codable properties
             }
             .navigationTitle("Artists")
             .task {  // ✅ <-- start here
@@ -847,9 +849,11 @@ func getRecord(id: Int, layout: String, token: String) async throws -> (Data, FM
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let recid  = 12345
+let layout = "Artists"
 
-guard   let (data, _) = try? await SwiftFM.getRecord(id: 123, layout: "Artists", token: token),
+guard   let (data, _) = try? await SwiftFM.getRecord(id: recid, layout: layout, token: token),
         let record    = try? JSONDecoder().decode(Artist.Record.self, from: data) 
         
 else { return }
@@ -863,7 +867,6 @@ self.artist = record
 ### Set Globals (function) -> Bool
 
 FileMaker Data API 18 or later. Returns a `Bool`. Make this call with a `[String: Any]` object containing a `globalFields` key.
-
 
 ```swift
 func setGlobals(payload: [String: Any], token: String) async -> Bool {
@@ -965,7 +968,7 @@ This call doesn't require a token.
 ```swift
 guard let info = await SwiftFM.getProductInfo() else { return }
 
-print(info.version)  // there are also properties for .name .buildDate, .dateFormat, .timeFormat, and .timeStampFormat
+print(info.version)  // properties for .name .buildDate, .dateFormat, .timeFormat, and .timeStampFormat
 ```
 
 ------
@@ -1132,9 +1135,10 @@ func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.
 #### Example
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let layout = "Artists"
 
-guard let result = await SwiftFM.getLayoutMetadata(layout: "Artist", token: token) else { return }
+guard let result = await SwiftFM.getLayoutMetadata(layout: layout, token: token) else { return }
 
 if let fields = result.fieldMetaData?.sorted() {
     print("\nFields:")
@@ -1220,9 +1224,9 @@ Returns a `Bool`.
 func executeScript(script: String, parameter: String?, layout: String, token: String) async -> Bool {
 
     // parameter
-    var param = ""
+    var param = ""  // if nil parameter
 
-    if let parameter = parameter {  // non nil parameter
+    if let parameter = parameter {  // else
         param = parameter
     }
 
@@ -1270,10 +1274,11 @@ func executeScript(script: String, parameter: String?, layout: String, token: St
 `Script` and `parameter` values are `.urlEncoded`, so spaces and such are ok.
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
 let script = "test script"
+let layout = "Artists"
 
-let result = await SwiftFM.executeScript(script: script, parameter: nil, layout: "Artists", token: token)
+let result = await SwiftFM.executeScript(script: script, parameter: nil, layout: layout, token: token)
 
 if result == true {
     print("fired script: \(script)")
@@ -1349,12 +1354,15 @@ func setContainer(recordId: Int,
 An `inferType` of `true` will use `DataExtension.swift` (extensions folder) to attempt to set the mime-type automatically. If you don't want this behavior, set `inferType` to `false`, which assigns a default mime-type of "application/octet-stream".
 
 ```swift
-let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let recid  = 12345
+let layout = "Artists"
+let field  = "headshot"
 
 guard   let url = URL(string: "http://starsite.co/brian_memoji.png"),
-        let fileName = await SwiftFM.setContainer(recordId: 123,
-                                                  layout: "Artist",
-                                                  container: "headshot",
+        let fileName = await SwiftFM.setContainer(recordId: recid,
+                                                  layout: layout,
+                                                  container: field,
                                                   filePath: url,
                                                   inferType: true,
                                                   token: token) 
