@@ -10,17 +10,6 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ---
 
-### 👉 v2.2.0
-
-`query()`, `getRecord()`, and `getRecords()` previously returned `(Data?, Data?)`. Returning a tuple of optionals meant an extra step before unwrapping the result. Not ideal. Starting with 2.2.0, record fetching methods `throw` and will return `(Data, DataInfo)`. This means:
-
-* You no longer need the extra `let (data, info)` call prior to unwrapping either object.
-* You can now 'dot' directly into `info`, like this: `print("fetched \(info.returnedCount) records")`.
-
-This behavior more closely mimics a `URLSession` call, which should make it nicer to use.
-
----
-
 ### 🗳 How To Use
 
 * Xcode -> File -> Add Packages
@@ -46,6 +35,33 @@ This was **a lot** of work. If you'd like to support the SwiftFM project, you ca
 ### ✅ Async/await
 
 SwiftFM was rewritten this year to use `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, skip SPM and download the repo instead, and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+
+---
+
+### TimeStamp Conversions
+
+FileMaker Cloud timeStamps are UTC, not local time. Because of this, you may have trouble syncing against timeStamps on your workstation. You may also need to work with FileMaker timeStamp values in Xcode. In either case, you should find these calcs handy.
+
+# FileMaker -> UTC
+```
+GetAsNumber ( timestamp_fmp )
+  - GetAsNumber ( Timestamp ( "1/1/1970" ; "00:00:00" ) )
+  + Floor ( Get ( CurrentTimeUTCMilliseconds ) / 1000 )
+  - GetAsNumber ( Get ( CurrentTimestamp ) )
+```
+
+# UTC -> FileMaker
+```
+GetAsTimestamp ( ( GetAsNumber ( timestamp_utc ) )
+  + GetAsNumber ( Timestamp ( "01/01/1970" ; "00:00:00" ) )
+  + GetAsNumber ( Get ( CurrentTimestamp ) )
+  - Floor ( Get ( CurrentTimeUTCMilliseconds ) / 1000 ) )
+```
+
+# Xcode (Swift)
+```swift
+let dateInt = Int( Date().timeIntervalSince1970 )
+```
 
 ---
 
@@ -79,7 +95,7 @@ For TESTING, you can set these with string literals. For PRODUCTION, you should 
 
 #### Example: Swift (UIKit)
 
-Set your environment in `AppDelegate` inside `applicationWillEnterForeground(_:)`. 
+Set your environment in `AppDelegate` inside `applicationWillEnterForeground(_:)`.
 
 ```swift
 class AppDelegate: UIResponder, UIApplicationDelegate {
