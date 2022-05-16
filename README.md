@@ -56,9 +56,9 @@ GetAsTimestamp ( ( GetAsNumber ( timestamp_utc ) )
   + GetAsNumber ( Get ( CurrentTimestamp ) )
   - Floor ( Get ( CurrentTimeUTCMilliseconds ) / 1000 ) )
 ```
-#### Xcode (Swift)
+#### Swift -> UTC
 ```swift
-let dateInt = Int( Date().timeIntervalSince1970 )
+let dateInt = Int(Date().timeIntervalSince1970)
 ```
 
 ---
