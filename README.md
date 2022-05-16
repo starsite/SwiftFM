@@ -38,7 +38,7 @@ SwiftFM was rewritten this year to use `async/await`. This requires Swift 5.5 an
 
 ---
 
-### ⏱ TimeStamp Conversions
+### ⏱ TimeStamps
 
 FileMaker Cloud timeStamps are UTC, not local time. Because of this, you may have trouble syncing against timeStamps on your workstation. You may also need to work with FileMaker timeStamp values in Xcode. In either case, you should find these calcs handy.
 
