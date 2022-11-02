@@ -26,7 +26,7 @@ SwiftFM is **in no way** related to the FIleMaker iOS App SDK.
 
 ### 🖐 How To Help
 
-This was **a lot** of work. If you'd like to support the SwiftFM project, you can:
+If you'd like to support the SwiftFM project, you can:
 
 * Contribute socially, by giving SwiftFM a ⭐️ on GitHub or telling other people about it
 * Contribute [financially](https://paypal.me/starsite) (paypal.me/starsite)
