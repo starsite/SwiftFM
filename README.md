@@ -1,3 +1,5 @@
+<img src="https://starsite.co/swiftfm-hero.png" alt="alt text" title="Starsite Labs" width="100%" />
+
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/starsite/SwiftFM) ![GitHub](https://img.shields.io/github/license/starsite/SwiftFM) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fstarsite%2FSwiftFM%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/starsite/SwiftFM) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fstarsite%2FSwiftFM%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/starsite/SwiftFM)
 
 # SwiftFM
