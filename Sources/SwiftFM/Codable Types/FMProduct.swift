@@ -9,13 +9,11 @@ import Foundation
 
 
 // MARK: - Get Product Info -> .productInfo
-
-public struct FMProduct {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
+public struct FMProduct: Codable {
+    
+    public let response: Response
+    public let messages: [Message]
     
     public struct Message: Codable {
         public let code: String
@@ -34,4 +32,5 @@ public struct FMProduct {
         public let timeFormat: String
         public let timeStampFormat: String
     }
+    
 }

@@ -9,13 +9,11 @@ import Foundation
 
 
 // MARK: - Get Scripts -> .scripts
-
-public struct FMScripts {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
+public struct FMScripts: Codable {
+    
+    public let response: Response
+    public let messages: [Message]
     
     public struct Message: Codable {
         public let code: String
@@ -31,7 +29,7 @@ public struct FMScripts {
         public let isFolder: Bool
         public let folderScriptNames: [FolderScriptName]?
         
-        public static func < (lhs: FMScripts.Script, rhs: FMScripts.Script) -> Bool {
+        public static func < (lhs: Script, rhs: Script) -> Bool {
             lhs.name < rhs.name
         }
     }
@@ -40,8 +38,9 @@ public struct FMScripts {
         public let name: String
         public let isFolder: Bool
         
-        public static func < (lhs: FMScripts.FolderScriptName, rhs: FMScripts.FolderScriptName) -> Bool {
+        public static func < (lhs: FolderScriptName, rhs: FolderScriptName) -> Bool {
             lhs.name < rhs.name
         }
     }
+
 }

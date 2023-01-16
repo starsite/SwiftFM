@@ -10,13 +10,11 @@ import Foundation
 
 // MARK: - Set Container, Set Globals, Execute Script -> Bool
 
-public struct FMBool {
+public struct FMBool: Codable {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
-    
+    public let response: Response
+    public let messages: [Message]
+                
     public struct Message: Codable {
         public let code: String
         public let message: String
@@ -24,4 +22,5 @@ public struct FMBool {
     
     public struct Response: Codable {
     }
+    
 }

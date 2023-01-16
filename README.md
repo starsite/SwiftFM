@@ -36,7 +36,7 @@ If you'd like to support the SwiftFM project, you can:
 
 ### ✅ Async/await
 
-SwiftFM was rewritten this year to use `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, skip SPM and download the repo instead, and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
+SwiftFM was rewritten last year to use `async/await`. This requires Swift 5.5 and iOS 15. If you need to compile for iOS 13 or 14, skip SPM and download the repo instead, and convert the `URLSession` calls using `withCheckedContinuation`. For more information on *that*, visit: [Swift by Sundell](https://wwdcbysundell.com/2021/wrapping-completion-handlers-into-async-apis/), [Hacking With Swift](https://www.hackingwithswift.com/quick-start/concurrency/how-to-use-continuations-to-convert-completion-handlers-into-async-functions), or watch Apple's WWDC 2021 [session](https://developer.apple.com/videos/play/wwdc2021/10132/) on the topic.
 
 ---
 
@@ -152,7 +152,7 @@ func newSession() async -> String? {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMSession.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMSession.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -202,7 +202,7 @@ func validateSession(token: String) async -> Bool {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMSession.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMSession.self, from: data),
             let message   = result.messages.first
 
     else { return false }
@@ -260,7 +260,7 @@ func deleteSession(token: String, completion: @escaping (Bool) -> Void) {
     URLSession.shared.dataTask(with: request) { data, resp, error in
 
         guard   let data    = data, error == nil,
-                let result  = try? JSONDecoder().decode(FMSession.Result.self, from: data),
+                let result  = try? JSONDecoder().decode(FMSession.self, from: data),
                 let message = result.messages.first
 
         else { return }
@@ -353,7 +353,7 @@ func createRecord(layout: String, payload: [String: Any]?, token: String) async 
     request.httpBody = body
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMRecord.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -412,7 +412,7 @@ func duplicateRecord(id: Int, layout: String, token: String) async -> String? {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMRecord.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -471,7 +471,7 @@ func editRecord(id: Int, layout: String, payload: [String: Any], token: String) 
     request.httpBody = body
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMRecord.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -528,7 +528,7 @@ func deleteRecord(id: Int, layout: String, token: String) async -> Bool {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMBool.self, from: data),
             let message   = result.messages.first
 
     else { return false }
@@ -588,7 +588,7 @@ func query(layout: String, payload: [String: Any], token: String) async throws -
     
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
             let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
+            let result    = try? JSONDecoder().decode(FMResult.self, from: data),  // .dataInfo
             let response  = json["response"] as? [String: Any],
             let messages  = json["messages"] as? [[String: Any]],
             let message   = messages[0]["message"] as? String,
@@ -635,7 +635,7 @@ let payload = ["query": [
 ]]
 
 guard   let (data, _) = try? await SwiftFM.query(layout: layout, payload: payload, token: token),
-        let records   = try? JSONDecoder().decode([Artist.Record].self, from: data) 
+        let records   = try? JSONDecoder().decode([Artist].self, from: data) 
         
 else { return }
 
@@ -691,7 +691,7 @@ func getRecords(layout: String,
     
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
             let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
+            let result    = try? JSONDecoder().decode(FMResult.self, from: data),  // .dataInfo
             let response  = json["response"] as? [String: Any],
             let messages  = json["messages"] as? [[String: Any]],
             let message   = messages[0]["message"] as? String,
@@ -727,17 +727,14 @@ There is a `.task` on `List` which will return data (async) from FileMaker. I'm 
 
 ```swift
 // model
-struct Artist {
-
-    struct Record: Codable {
-        let recordId: String    // ✨ useful as a \.keyPath in List views
-        let modId: String
-        let fieldData: FieldData
-    }
-
+struct Artist: Codable {
+    let recordId: String    // ✨ useful as a \.keyPath in List views
+    let modId: String
+    let fieldData: FieldData
+    
     struct FieldData: Codable {
         let name: String      
-    }    
+    }
 }
 
 // view
@@ -746,7 +743,7 @@ struct ContentView: View {
     let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
   
     // our data source
-    @State private var artists = [Artist.Record]()
+    @State private var artists = [Artist]()
   
     var body: some View {
         NavigationView {
@@ -776,7 +773,7 @@ struct ContentView: View {
     func fetchArtists(token: String) async {
 
         guard   let (data, _) = try? await SwiftFM.getRecords(layout: "Artists", limit: 20, sortField: "name", ascending: true, portal: nil, token: token)
-                let records   = try? JSONDecoder().decode([Artist.Record].self, from: data) 
+                let records   = try? JSONDecoder().decode([Artist].self, from: data) 
                 
         else { return }
 
@@ -809,7 +806,7 @@ func getRecord(id: Int, layout: String, token: String) async throws -> (Data, FM
     
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
             let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-            let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
+            let result    = try? JSONDecoder().decode(FMResult.self, from: data),  // .dataInfo
             let response  = json["response"] as? [String: Any],
             let messages  = json["messages"] as? [[String: Any]],
             let message   = messages[0]["message"] as? String,
@@ -845,7 +842,7 @@ let recid  = 12345
 let layout = "Artists"
 
 guard   let (data, _) = try? await SwiftFM.getRecord(id: recid, layout: layout, token: token),
-        let record    = try? JSONDecoder().decode(Artist.Record.self, from: data) 
+        let record    = try? JSONDecoder().decode(Artist.self, from: data) 
         
 else { return }
 
@@ -876,7 +873,7 @@ func setGlobals(payload: [String: Any], token: String) async -> Bool {
     request.httpBody = body
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMBool.self, from: data),
             let message   = result.messages.first
 
     else { return false }
@@ -932,7 +929,7 @@ func getProductInfo() async -> FMProduct.ProductInfo? {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMProduct.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMProduct.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -981,7 +978,7 @@ func getDatabases() async -> [FMDatabases.Database]? {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMDatabases.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMDatabases.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -1033,7 +1030,7 @@ func getLayouts(token: String) async -> [FMLayouts.Layout]? {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMLayouts.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMLayouts.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -1098,7 +1095,7 @@ func getLayoutMetadata(layout: String, token: String) async -> FMLayoutMetaData.
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMLayoutMetaData.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMLayoutMetaData.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -1163,7 +1160,7 @@ func getScripts(token: String) async -> [FMScripts.Script]? {
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMScripts.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMScripts.self, from: data),
             let message   = result.messages.first
 
     else { return nil }
@@ -1241,7 +1238,7 @@ func executeScript(script: String, parameter: String?, layout: String, token: St
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMBool.self, from: data),
             let message   = result.messages.first
 
     else { return false }
@@ -1322,7 +1319,7 @@ func setContainer(recordId: Int,
 
     // session
     guard   let (data, _) = try? await URLSession.shared.data(for: request),
-            let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+            let result    = try? JSONDecoder().decode(FMBool.self, from: data),
             let message   = result.messages.first
 
     else { return nil }

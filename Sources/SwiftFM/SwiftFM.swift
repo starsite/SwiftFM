@@ -4,7 +4,7 @@
 //  Created by Brian Hamm on 9/16/18.
 //  Refactored for async/await and Codable on 2/14/22.
 //
-//  Copyright © 2018-2022 Brian Hamm. All rights reserved.
+//  Copyright © 2018-2023 Brian Hamm. All rights reserved.
 //
 
 
@@ -91,7 +91,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMSession.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMSession.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -155,7 +155,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMSession.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMSession.self, from: data),
                 let message   = result.messages.first
                 
         else { return false }
@@ -232,7 +232,7 @@ open class SwiftFM {
         URLSession.shared.dataTask(with: request) { data, resp, error in
 
             guard   let data    = data, error == nil,
-                    let result  = try? JSONDecoder().decode(FMSession.Result.self, from: data),
+                    let result  = try? JSONDecoder().decode(FMSession.self, from: data),
                     let message = result.messages.first
 
             else { return }
@@ -310,7 +310,7 @@ open class SwiftFM {
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
+                let result    = try? JSONDecoder().decode(FMResult.self, from: data),  // .dataInfo
                 let response  = json["response"] as? [String: Any],
                 let messages  = json["messages"] as? [[String: Any]],
                 let message   = messages[0]["message"] as? String,
@@ -399,7 +399,7 @@ open class SwiftFM {
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
+                let result    = try? JSONDecoder().decode(FMResult.self, from: data),  // .dataInfo
                 let response  = json["response"] as? [String: Any],
                 let messages  = json["messages"] as? [[String: Any]],
                 let message   = messages[0]["message"] as? String,
@@ -461,7 +461,7 @@ open class SwiftFM {
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
                 let json      = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                let result    = try? JSONDecoder().decode(FMResult.Result.self, from: data),  // .dataInfo
+                let result    = try? JSONDecoder().decode(FMResult.self, from: data),  // .dataInfo
                 let response  = json["response"] as? [String: Any],
                 let messages  = json["messages"] as? [[String: Any]],
                 let message   = messages[0]["message"] as? String,
@@ -542,7 +542,7 @@ open class SwiftFM {
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMRecord.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -592,7 +592,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMRecord.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -659,7 +659,7 @@ open class SwiftFM {
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMRecord.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMRecord.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -709,7 +709,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.self, from: data),
                 let message   = result.messages.first
                     
         else { return false }
@@ -773,7 +773,7 @@ open class SwiftFM {
         request.httpBody = body
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.self, from: data),
                 let message   = result.messages.first
                     
         else { return false }
@@ -814,7 +814,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMProduct.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMProduct.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -857,7 +857,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMDatabases.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMDatabases.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -905,7 +905,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMLayouts.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMLayouts.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -954,7 +954,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMLayoutMetaData.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMLayoutMetaData.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -1006,7 +1006,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMScripts.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMScripts.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }
@@ -1070,7 +1070,7 @@ open class SwiftFM {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.self, from: data),
                 let message   = result.messages.first
                     
         else { return false }
@@ -1173,7 +1173,7 @@ open class SwiftFM {
         
         // session
         guard   let (data, _) = try? await URLSession.shared.data(for: request),
-                let result    = try? JSONDecoder().decode(FMBool.Result.self, from: data),
+                let result    = try? JSONDecoder().decode(FMBool.self, from: data),
                 let message   = result.messages.first
                     
         else { return nil }

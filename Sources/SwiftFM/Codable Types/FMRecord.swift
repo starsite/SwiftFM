@@ -9,13 +9,11 @@ import Foundation
 
 
 // MARK: - Create Record, Duplicate Record, or Edit Record -> .recordId? or .modId?
-
-public struct FMRecord {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
+public struct FMRecord: Codable {
+    
+    public let response: Response
+    public let messages: [Message]
     
     public struct Message: Codable {
         public let code: String
@@ -26,4 +24,5 @@ public struct FMRecord {
         public let recordId: String?
         public let modId: String?
     }
+
 }

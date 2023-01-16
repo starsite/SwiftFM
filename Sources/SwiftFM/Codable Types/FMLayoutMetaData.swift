@@ -10,12 +10,10 @@ import Foundation
 
 // MARK: - Get Layout Metadata -> .response
 
-public struct FMLayoutMetaData {
+public struct FMLayoutMetaData: Codable {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
+    public let response: Response
+    public let messages: [Message]
     
     public struct Message: Codable {
         public let code: String
@@ -45,7 +43,7 @@ public struct FMLayoutMetaData {
         public let repetitionEnd: Int
         public let valueList: String?
         
-        public static func < (lhs: FMLayoutMetaData.Field, rhs: FMLayoutMetaData.Field) -> Bool {
+        public static func < (lhs: Field, rhs: Field) -> Bool {
             lhs.name < rhs.name
         }
     }
@@ -58,7 +56,7 @@ public struct FMLayoutMetaData {
         public let type: String
         public let values: [Value]
         
-        public static func < (lhs: FMLayoutMetaData.ValueList, rhs: FMLayoutMetaData.ValueList) -> Bool {
+        public static func < (lhs: ValueList, rhs: ValueList) -> Bool {
             lhs.name < rhs.name
         }
     }
@@ -67,7 +65,7 @@ public struct FMLayoutMetaData {
         public let displayValue: String
         public let value: String
         
-        public static func < (lhs: FMLayoutMetaData.Value, rhs: FMLayoutMetaData.Value) -> Bool {
+        public static func < (lhs: Value, rhs: Value) -> Bool {
             lhs.displayValue < rhs.displayValue
         }
     }

@@ -10,12 +10,10 @@ import Foundation
 
 // MARK: - Get Databases -> .databases
 
-public struct FMDatabases {
+public struct FMDatabases: Codable {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
+    public let response: Response
+    public let messages: [Message]
     
     public struct Message: Codable {
         public let code: String
@@ -29,8 +27,9 @@ public struct FMDatabases {
     public struct Database: Codable, Comparable {
         public let name: String
         
-        public static func < (lhs: FMDatabases.Database, rhs: FMDatabases.Database) -> Bool {
+        public static func < (lhs: Database, rhs: Database) -> Bool {
             lhs.name < rhs.name
         }
     }
+    
 }

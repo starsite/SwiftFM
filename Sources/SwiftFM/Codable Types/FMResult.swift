@@ -9,13 +9,11 @@ import Foundation
 
 
 // MARK: - Query, Get Record, or Get Records -> .dataInfo?
-
-public struct FMResult {
     
-    public struct Result: Codable {
-        public let response: Response
-        public let messages: [Message]
-    }
+public struct FMResult: Codable {
+    
+    public let response: Response
+    public let messages: [Message]
     
     public struct Message: Codable {
         public let code: String
@@ -34,4 +32,5 @@ public struct FMResult {
         public let foundCount: Int
         public let returnedCount: Int
     }
+    
 }
