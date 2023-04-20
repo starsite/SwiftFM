@@ -66,7 +66,7 @@ SwiftFM was rewritten last year to use `async/await`. This requires Swift 5.5 an
 
 ### Environment Variables
 
-For TESTING, you can set these with string literals. For PRODUCTION, you should be fetching these values from elsewhere. DO NOT deploy apps with credentials visible in code. 😵
+For TESTING, you can set these with string literals. For PRODUCTION, you should be getting these values from elsewhere. DO NOT deploy apps with credentials visible in code. 😵
 
 #### Example: Swift (UIKit)
 
@@ -79,7 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         let host = "my.host.com"  //
         let db   = "my_database"  //
-                                  //  these should be fetched elsewhere, or prompted at launch
+                                  //  fetch these from elsewhere or prompt at launch
         let user = "username"     //
         let pass = "password"     //
 
@@ -108,7 +108,7 @@ struct MyApp: App {
     init() {
         let host = "my.host.com"  //
         let db   = "my_database"  //
-                                  //  these should be fetched elsewhere, or prompted at launch
+                                  //  fetch these from elsewhere or prompt at launch
         let user = "username"     //
         let pass = "password"     //
 
@@ -223,7 +223,8 @@ func validateSession(token: String) async -> Bool {
 #### Example
 
 ```swift
-let isValid = await SwiftFM.validateSession(token: "abcde12345xxxxx")
+let token   = UserDefaults.standard.string(forKey: "fm-token") ?? ""
+let isValid = await SwiftFM.validateSession(token: token)
 
 switch isValid {
 case true:
@@ -333,9 +334,9 @@ Returns an optional `recordId`. This can be called with or without a payload. If
 ```swift
 func createRecord(layout: String, payload: [String: Any]?, token: String) async -> String? {
 
-    var fieldData: [String: Any] = ["fieldData": [:]]  // if nil payload
+    var fieldData: [String: Any] = ["fieldData": [:]]  // nil payload
 
-    if let payload = payload {  // else
+    if let payload {  // non-nil payload
         fieldData = payload
     }
 
@@ -664,9 +665,9 @@ func getRecords(layout: String,
     [{"fieldName":"\(sortField)","sortOrder":"\(order)"}]
     """
     
-    var portalJson = "[]"  // if nil portal
+    var portalJson = "[]"  // nil portal
     
-    if let portal = portal {  // else
+    if let portal {  // non-nil portal
         portalJson = """
         ["\(portal)"]
         """
@@ -1212,9 +1213,9 @@ Returns a `Bool`.
 func executeScript(script: String, parameter: String?, layout: String, token: String) async -> Bool {
 
     // parameter
-    var param = ""  // if nil parameter
+    var param = ""  // nil parameter
 
-    if let parameter = parameter {  // else
+    if let parameter {  // non-nil parameter
         param = parameter
     }
 
