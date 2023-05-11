@@ -29,7 +29,7 @@ open class SwiftFM {
     /// The `auth` value will be passed later, as part of the `Authorization` header.
     ///
     /// ⚠️ For TESTING, you can set these with string literals. For PRODUCTION, you should be fetching/setting these values from elsewhere. **Do not** deploy apps with credentials visible in code.
-
+    ///
     /// ```swift
     /// func applicationWillEnterForeground(_ application: UIApplication) {
     ///
@@ -127,7 +127,7 @@ open class SwiftFM {
     /// - Returns: A `Bool` indicating a in/valid token
     ///
     /// - Note: This can be called anytime but is most useful when wrapping other SwiftFM calls, to ensure you're passing a valid token.
-    
+    ///
     /// ```swift
     /// let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
     /// let isValid = await SwiftFM.validateSession(token: token)
@@ -190,7 +190,7 @@ open class SwiftFM {
     /// SwiftUI: Call this in `MyApp:App`, inside a `.scenePhase` switch.
     ///
     /// This method uses an `@escaping` closure rather than `async`, in order to work with SwiftUI `.scenePhase` transitions.
-
+    ///
     /// ```swift
     /// func applicationDidEnterBackground(_ application: UIApplication) {
     ///
@@ -231,7 +231,7 @@ open class SwiftFM {
 
         URLSession.shared.dataTask(with: request) { data, resp, error in
 
-            guard   let data    = data, error == nil,
+            guard   let data, error == nil,
                     let result  = try? JSONDecoder().decode(FMSession.self, from: data),
                     let message = result.messages.first
 
@@ -271,7 +271,7 @@ open class SwiftFM {
     /// - Note: Use `JSONDecoder` to process the record data (`Data, _`). Create a Codable model struct that includes your entity's `fieldData`. Or use `JSONSerialization` to decode the objects manually.
     ///
     /// `DataInfo` properties can be accessed immediately, as in `print(info.foundCount)`.
-
+    ///
     /// ```swift
     /// let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
     /// let layout = "Artists"
@@ -374,7 +374,7 @@ open class SwiftFM {
         
         var portalJson = "[]"  // nil portal
         
-        if let portal = portal {  // else
+        if let portal {  // else
             portalJson = """
             ["\(portal)"]
             """
@@ -504,7 +504,7 @@ open class SwiftFM {
     ///
     /// - Returns: The `recordId` for the created record
     /// - Note: Setting a `nil` payload will create an empty record.
-    
+    ///
     /// ```swift
     /// let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
     /// let layout = "Artists"
@@ -524,7 +524,7 @@ open class SwiftFM {
         
         var fieldData: [String: Any] = ["fieldData": [:]]  // nil payload
         
-        if let payload = payload {  // else
+        if let payload {  // non-nil payload
             fieldData = payload
         }
         
@@ -628,7 +628,7 @@ open class SwiftFM {
     ///
     /// - Returns: An updated `modId` value for the modified record
     /// - Note: If you choose to include a `modId` value in the payload, the record will only be modified if it matches the `modId` value in FileMaker Server. This ensures you're working with the current version of the record. If you do not pass a `modId`, the record will be modfied without this check.
-
+    ///
     /// ```swift
     /// let token  = UserDefaults.standard.string(forKey: "fm-token") ?? ""
     /// let id     = 12345
@@ -741,7 +741,7 @@ open class SwiftFM {
     ///
     /// - Returns: A `Bool` indicating a un/successful request
     /// - Note: Unlike `fieldData` payloads, global fields must be set using fully qualified field names (`table name::field name`).
-
+    ///
     /// ```swift
     /// let token = UserDefaults.standard.string(forKey: "fm-token") ?? ""
     ///
@@ -752,7 +752,7 @@ open class SwiftFM {
     ///
     /// let result = await SwiftFM.setGlobals(payload: payload, token: token)
     ///
-    /// if result == true {
+    /// if result {  // true
     ///     print("globals set")
     /// }
     /// ```
@@ -1048,7 +1048,7 @@ open class SwiftFM {
         
         var param = ""  // nil parameter
         
-        if let parameter = parameter {  // else
+        if let parameter {  // non-nil parameter
             param = parameter
         }
         
@@ -1108,7 +1108,7 @@ open class SwiftFM {
     ///
     /// - Returns: The `fileName` of the file used to set the container
     /// - Note: An `inferType` of false will set a default "application/octet-stream" value for the mime-type
-
+    ///
     /// ```swift
     /// let token     = UserDefaults.standard.string(forKey: "fm-token") ?? ""
     /// let id        = 12345
