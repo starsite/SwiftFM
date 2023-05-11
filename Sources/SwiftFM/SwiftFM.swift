@@ -35,7 +35,7 @@ open class SwiftFM {
     ///
     ///     let host = "my.host.com"  //
     ///     let db   = "my_database"  //
-    ///                               //  fetch these from elsewhere, or prompt at launch
+    ///                               //  fetch values from elsewhere or prompt at launch
     ///     let user = "username"     //
     ///     let pass = "password"     //
     ///
@@ -56,7 +56,7 @@ open class SwiftFM {
     ///     init() {
     ///         let host = "my.host.com"  //
     ///         let db   = "my_database"  //
-    ///                                   //  fetch these from elsewhere, or prompt at launch
+    ///                                   //  fetch values from elsewhere or prompt at launch
     ///         let user = "username"     //
     ///         let pass = "password"     //
     ///
