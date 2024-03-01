@@ -4,7 +4,7 @@
 
 # SwiftFM
 
-SwiftFM is a Swift framework for the FileMaker Data API. It uses modern Swift features like `async/await`, `Codable` type-safe returns, and has extensive support for `DocC`.
+SwiftFM is a Swift Package for the FileMaker Data API. It uses modern Swift features like `async/await`, `Codable` type-safe returns, and has extensive support for `DocC`.
 
 This `README.md` is aimed at Swift devs who want to use the Data API in their UIKit and SwiftUI projects. Each function shown below is paired with a code example.
 
